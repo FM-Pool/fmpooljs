@@ -33,8 +33,8 @@
             var fieldWrapper = this;
             var input = this.find("input");
             var inputWrapper = this.find(".pss_editor_container");
-            input.removeClass("pss_readwrite").addClass("pss_readonly");
-            fieldWrapper
+            fieldWrapper.removeClass("pss_readwrite").addClass("pss_readonly");
+            input
                 .removeClass("pss_field_input")
                 .addClass("pss_read_only_editor")
                 .attr("readonly", "readonly");
