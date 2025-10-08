@@ -1,4 +1,5 @@
 (function (global) {
+    console.log("fmpooljs");
     if (!$) {
         throw new Error("fmpooljs requires jQuery to be loaded first!");
     }
@@ -41,6 +42,10 @@
 
     fmpooljs.prototype.saveAmountIfElementsToSession = function(key) {
         setSessionItem(key, this.countAmountOfElements());
+    }
+
+    fmpooljs.prototype.clear = function(){
+        console.log(this.elements);
     }
 
     global.fmpooljs = fmpooljs;
