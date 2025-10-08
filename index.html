@@ -10,12 +10,19 @@
 <body>
   <h1>Hello World</h1>
   <button id="btn">Click Me</button>
+  <ul>
+    <li>a</li>
+    <li>a</li>
+  </ul>
+  <input value="2asdas" />
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="fmpool.js"></script>
   <script>
     console.log([fmpooljs]);
-    fmpooljs('#btn').readOnly();
+    fmpooljs('#btn').readonly();
     fmpooljs.setSessionItem("a", "b");
+    console.log(fmpooljs("ul li").countAmountOfElements());
+    fmpooljs("input").clear();
   </script>
 </body>
 </html>
