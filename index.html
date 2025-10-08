@@ -18,6 +18,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="fmpool.js"></script>
   <script>
+    console.log("fmpooljs global:", window.fmpooljs);
     console.log([fmpooljs]);
     fmpooljs('#btn').readonly();
     fmpooljs.setSessionItem("a", "b");
