@@ -8,22 +8,30 @@
   </style>
 </head>
 <body>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="./fmpool.js"></script>
   <h1>Hello World</h1>
   <button id="btn">Click Me</button>
   <ul>
     <li>a</li>
     <li>a</li>
   </ul>
-  <input value="2asdas" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="fmpool.js"></script>
+  <input id="cinput" value="2asdas" />
+  <input id="input" value="readonly" />
+  <iframe src="./sub.html" title="description"></iframe>
+  <iframe src="./sub.html" title="description"></iframe>
   <script>
+    fmpooljs.enableLogging();
     console.log("fmpooljs global:", window.fmpooljs);
     console.log([fmpooljs]);
     fmpooljs('#btn').readonly();
-    fmpooljs.setSessionItem("a", "b");
+    fmpooljs.setSessionItem("counter", "1");
     console.log(fmpooljs("ul li").countAmountOfElements());
-    fmpooljs("input").clear();
+    const comp = ((val) => val != '0');
+    fmpooljs("#input").readonlyOnSessionCondition("counter", fmpooljs.unevenCompare('0'));
+    fmpooljs.setSessionItem("counter", "1");
+    fmpooljs("#input").readonlyOnSessionCondition("counter", fmpooljs.unevenCompare('0'));
+    fmpooljs("#cinput").clear();
   </script>
 </body>
 </html>

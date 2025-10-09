@@ -19,7 +19,7 @@
     // --- Helper: controlled logger ---
     function log(...args) {
         if (loggingEnabled) {
-            console.log("[fmpooljs]", ...args);
+            console.log("[fmpooljs]", [...args]);
         }
     }
 
@@ -52,14 +52,17 @@
                 .removeClass("pss_editor_container")
                 .addClass("pss_entry_editor");
             fieldWrapper.find(".pss_actions").remove();
+            log("set element readonly", $el);
             return $el;
         };
 
-        $el.readonlyOnSessionCondition = function (key, val) {
-            if (getSessionItem(key) === val) {
-                this.readonly();
+        $el.readonlyOnSessionCondition = function (key, predict) {
+            if (predict(getSessionItem(key))) {
+                $el.readonly();
+                log("Condition met to set element readonly", $el, key, "==", predict);
+            } else {
+                log("Condition not met to set element readonly", $el, key, "==",  predict);
             }
-            log("Read value from store", key, "==", value);
             return $el;
         };
 
@@ -68,7 +71,9 @@
         };
 
         $el.saveAmountIfElementsToSession = function (key) {
-            setSessionItem(key, this.countAmountOfElements());
+            var val = this.countAmountOfElements();
+            setSessionItem(key, val);
+            log("Set item in seesion store", key, "==", val);
             return $el;
         };
 
@@ -84,7 +89,7 @@
     // --- Static / global methods ---
     fmpooljs.setSessionItem = function (key, val) {
         sessionStorage.setItem(key, val);
-        log("Set item in seesion stire", key, "==", val);
+        log("Set item in seesion store", key, "==", val);
     };
 
     fmpooljs.getSessionItem = function (key) {
@@ -92,6 +97,13 @@
         log("Read value from store", key, "==", value);
         return value;
     };
+
+    fmpooljs.unevenCompare = function (value) {
+        var func = ((el) => el != value)
+        log("unevenCompare", func);
+        return func;
+    };
+
 
     // --- Logging controls ---
     fmpooljs.enableLogging = function () {
