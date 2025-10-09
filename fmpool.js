@@ -13,6 +13,16 @@
         throw new Error("fmpooljs requires jQuery to be loaded first!");
     }
 
+    // --- Internal state ---
+    let loggingEnabled = false;
+
+    // --- Helper: controlled logger ---
+    function log(...args) {
+        if (loggingEnabled) {
+            console.log("[fmpooljs]", ...args);
+        }
+    }
+
     // --- helper functions (available inside closure) ---
     function setSessionItem(key, val) {
         sessionStorage.setItem(key, val);
@@ -49,6 +59,7 @@
             if (getSessionItem(key) === val) {
                 this.readonly();
             }
+            log("Read value from store", key, "==", value);
             return $el;
         };
 
@@ -62,6 +73,7 @@
         };
 
         $el.clear = function () {
+            log("Cleared element",$el);
             this.val("");
             return $el;
         };
@@ -72,19 +84,26 @@
     // --- Static / global methods ---
     fmpooljs.setSessionItem = function (key, val) {
         sessionStorage.setItem(key, val);
+        log("Set item in seesion stire", key, "==", val);
     };
 
     fmpooljs.getSessionItem = function (key) {
-        return sessionStorage.getItem(key);
+        var value = sessionStorage.getItem(key);
+        log("Read value from store", key, "==", value);
+        return value;
     };
 
-    fmpooljs.removeSessionItem = function (key) {
-        sessionStorage.removeItem(key);
+    // --- Logging controls ---
+    fmpooljs.enableLogging = function () {
+        loggingEnabled = true;
+        console.info("[fmpooljs] Logging enabled");
     };
 
-    fmpooljs.clearSession = function () {
-        sessionStorage.clear();
+    fmpooljs.disableLogging = function () {
+        loggingEnabled = false;
+        console.info("[fmpooljs] Logging disabled");
     };
+
 
     // Expose version for clarity
     fmpooljs.version = "0.0.1";
