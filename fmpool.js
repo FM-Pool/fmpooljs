@@ -36,7 +36,9 @@
      * Main wrapper (returns enhanced jQuery object)
      */
     function fmpooljs(selector, context) {
-        const $el = $(selector, context);
+        const $el = $(selector);
+
+        log("selected element", $el, selector, context);
 
         // --- Element-level methods ---
         $el.readonly = function () {
@@ -61,7 +63,7 @@
                 $el.readonly();
                 log("Condition met to set element readonly", $el, key, "==", predict);
             } else {
-                log("Condition not met to set element readonly", $el, key, "==",  predict);
+                log("Condition not met to set element readonly", $el, key, "==", predict);
             }
             return $el;
         };
@@ -78,8 +80,8 @@
         };
 
         $el.clear = function () {
-            log("Cleared element",$el);
-            this.val("");
+            log("Cleared element", $el, this);
+            $el.val("");
             return $el;
         };
 
@@ -116,9 +118,36 @@
         console.info("[fmpooljs] Logging disabled");
     };
 
+    fmpooljs.exposeToIframes = function () {
+        if (!window.frames || window.frames.length === 0) {
+            log("No iframes found in this window");
+            return;
+        }
+
+        const frames = Array.from(window.frames);
+        let count = 0;
+
+        for (let i = 0; i < frames.length; i++) {
+            const frame = frames[i];
+            try {
+                frame.fmpooljs = fmpooljs;
+                log("Attached fmpooljs to iframe:", frame.location?.href || "(no href)");
+                count++;
+            } catch (e) {
+                debug("Skipped cross-origin iframe:", e.message);
+            }
+        }
+
+        log(`fmpooljs exposed to ${count} iframe(s)`);
+    };
+
 
     // Expose version for clarity
     fmpooljs.version = "0.0.1";
 
     return fmpooljs;
+});
+
+jQuery(function () {
+
 });

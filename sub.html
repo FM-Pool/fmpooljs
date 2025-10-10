@@ -8,14 +8,18 @@
   </style>
 </head>
 <body>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <h1>Sub</h1>
-  <button id="btn">Click Me</button>
+  <button id="subbtn">Click Me</button>
   <ul>
     <li>b</li>
   </ul>
-  <input value="2asdas" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script>
+  <input id="subin" value="2asdas" />
+<script>
+    console.log(["sub", fmpooljs, $("#subbtn")]);
+    //$("#subin").val("");
+     fmpooljs.enableLogging();
+     fmpooljs("#subin").clear();
   </script>
 </body>
 </html>

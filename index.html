@@ -22,6 +22,8 @@
   <iframe src="./sub.html" title="description"></iframe>
   <script>
     fmpooljs.enableLogging();
+    fmpooljs.exposeToIframes();
+    /*
     console.log("fmpooljs global:", window.fmpooljs);
     console.log([fmpooljs]);
     fmpooljs('#btn').readonly();
@@ -32,6 +34,7 @@
     fmpooljs.setSessionItem("counter", "1");
     fmpooljs("#input").readonlyOnSessionCondition("counter", fmpooljs.unevenCompare('0'));
     fmpooljs("#cinput").clear();
+    */
   </script>
 </body>
 </html>
