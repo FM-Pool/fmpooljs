@@ -18,8 +18,11 @@
 <script>
     console.log(["sub", fmpooljs, $("#subbtn")]);
     //$("#subin").val("");
-     fmpooljs.enableLogging();
+    $(function() {
+  fmpooljs.enableLogging();
      fmpooljs("#subin").clear();
+});
+     
   </script>
 </body>
 </html>
