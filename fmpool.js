@@ -13,20 +13,32 @@
         throw new Error("fmpooljs requires jQuery to be loaded first!");
     }
 
+    //
+    const version = "0.0.1";
+
     // --- Internal state ---
     let loggingEnabled = false;
 
     // --- Helper: controlled logger ---
     function log(...args) {
         if (loggingEnabled) {
-            console.log("[fmpooljs]", [...args]);
+            if (args.length == 1 && (typeof args[0] === 'string' || args[0] instanceof String)) {
+                console.log("[fmpooljs] " + args);
+            } else {
+                console.log("[fmpooljs] ", [...args]);
+            }
         }
+    }
+
+    function info(...args) {
+        console.log("[fmpooljs:info] " + args);
     }
 
     // ===========================================================
     // 🔧 Shared Builder — defines everything once
     // ===========================================================
     function createFmpool(win, jq, frame) {
+        info("init version " + version);
         log("createFmpool", win, jq, frame, win.location?.href, frame);
         const session = win.sessionStorage;
         let currentWindow = win;
@@ -38,8 +50,6 @@
         function fmpooljs(selector, context) {
             if (newWindow != null) {
                 log("reinit", newWindow, frame, currentWindow.location?.href, newWindow.location.href);
-                //fmpooljs.reinitialize(newWindow, jq);
-                //newWindow = null;
                 instance = createFmpool(newWindow, newWindow.$);
                 newWindow.fmpooljs = instance;
                 log("Reinitialized fmpooljs for iframe context:", newWindow.location?.href || "(no href)", newWindow);
@@ -120,18 +130,24 @@
             return func;
         };
 
+        fmpooljs.evenCompare = function (value) {
+            const func = (el) => el == value;
+            log("evenCompare created:", func);
+            return func;
+        };
+
         // --- Logging controls ---
         fmpooljs.enableLogging = function () {
             loggingEnabled = true;
-            console.info("[fmpooljs] Logging enabled");
+            log("Logging enabled");
         };
 
         fmpooljs.disableLogging = function () {
             loggingEnabled = false;
-            console.info("[fmpooljs] Logging disabled");
+            log("Logging disabled");
         };
 
-        fmpooljs.version = "1.3.0";
+        fmpooljs.version = version;
 
         return fmpooljs;
     }
@@ -152,10 +168,6 @@
         return newFmpool;
     };
 
-    instance.prepareReinitalize = function (frame, jq) {
-        log("prepareReinitalize", frame.location?.href);
-    };
-
     instance.exposeToIframes = function () {
         if (!window.frames || window.frames.length === 0) {
             log("No iframes found in this window");
@@ -169,7 +181,6 @@
             const frame = frames[i];
             try {
                 frame.fmpooljs = createFmpool(window, $, frame);
-                frame.fmpooljs.prepareReinitalize(frame, jq);
                 log("Attached fmpooljs to iframe:", frame.location?.href || "(no href)");
                 count++;
             } catch (e) {
@@ -182,11 +193,7 @@
 
 
     // Expose version for clarity
-    instance.version = "0.0.1";
+    instance.version = version;
 
     return instance;
-});
-
-jQuery(function () {
-
 });
