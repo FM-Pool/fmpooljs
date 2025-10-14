@@ -113,6 +113,7 @@
                 const val = $el.val();
                 log("Save value to store:", key, val);
                 session.setItem(key, val);
+                return $el;
             }
 
             $el.clearOnSessionValueCondition = function(key, predict) {
@@ -122,6 +123,14 @@
                     $el.clear();
                     log("Value cleared", $el);
                 }
+                return $el;
+            }
+
+            $el.prefillFromStore = function(key) {
+                const value = session.getItem(key);
+                log("Prefill from store", key, value, $el);
+                $el.fillAutoCompleteTextField(value);
+                return $el;
             }
 
             return $el;
