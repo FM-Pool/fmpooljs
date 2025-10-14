@@ -116,6 +116,13 @@
                 return $el;
             }
 
+            $el.saveFieldValueToStore = function(key) {
+                const val = $el.find("input").val();
+                log("Save field value to store:", key, val);
+                session.setItem(key, val);
+                return $el;
+            }
+
             $el.clearOnSessionValueCondition = function(key, predict) {
                 const value = session.getItem(key);
                 log("Check condition for clear value:", key, value, predict);
