@@ -14,7 +14,7 @@
     }
 
     //
-    const version = "0.0.3";
+    const version = "0.0.4";
 
     // --- Internal state ---
     let loggingEnabled = false;
