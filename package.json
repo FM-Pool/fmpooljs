@@ -1,0 +1,14 @@
+{
+  "name": "fmpooljs",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "fmpooljs for Planon.",
+  "main": "dist/fmpooljs.min.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^3.29.4"
+  }
+}

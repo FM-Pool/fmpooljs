@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>myQuery Demo</title>
   <style>
-    .highlight { color: red; }
+    .highlight {
+      color: red;
+    }
   </style>
 </head>
+
 <body>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="./fmpool.js"></script>
   <h1>Hello World</h1>
   <button id="btn">Click Me</button>
@@ -24,6 +28,12 @@
     fmpooljs.enableLogging();
     fmpooljs.exposeToIframes();
     fmpooljs("#cinput").clear();
+    setTimeout(() => {
+      console.log("Delayed for 1 second.");
+      const iframe = document.createElement('iframe');
+iframe.src = './dyn_sub.html';
+document.body.appendChild(iframe);
+    }, 1000);
     /*
     console.log("fmpooljs global:", window.fmpooljs);
     console.log([fmpooljs]);
@@ -38,4 +48,5 @@
     */
   </script>
 </body>
+
 </html>
