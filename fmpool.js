@@ -109,6 +109,21 @@
                 return $el;
             };
 
+            $el.saveValueToStore = function(key) {
+                const val = $el.val();
+                log("Save value to store:", key, val);
+                session.setItem(key, val);
+            }
+
+            $el.clearOnSessionValueCondition = function(key, predict) {
+                const value = session.getItem(key);
+                log("Check condition for clear value:", key, value, predict);
+                if (typeof predict === "function" ? predict(value) : value === predict) {
+                    $el.clear();
+                    log("Value cleared", $el);
+                }
+            }
+
             return $el;
         }
 
