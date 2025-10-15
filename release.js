@@ -46,8 +46,9 @@ run("git tag -f latest");
 
 // --- 5️⃣ Push an GitHub ---
 run("git push origin main --follow-tags");
+run(`git push origin v${version}`);
 run("git push origin -f latest");
 
 console.log(`🎉 Release v${version} erfolgreich erstellt und gepusht!`);
-console.log(`👉 jsDelivr URL: https://cdn.jsdelivr.net/gh/<DEIN_GITHUB_USER>/fmpooljs@v${version}/dist/fmpooljs.min.js`);
-console.log(`👉 Always latest: https://cdn.jsdelivr.net/gh/<DEIN_GITHUB_USER>/fmpooljs@latest/dist/fmpooljs.min.js`);
+console.log(`👉 jsDelivr URL: https://cdn.jsdelivr.net/gh/FM-Pool/fmpooljs@v${version}/dist/fmpooljs.min.js`);
+console.log(`👉 Always latest: https://cdn.jsdelivr.net/gh/FM-Pool>/fmpooljs@latest/dist/fmpooljs.min.js`);
