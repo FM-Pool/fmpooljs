@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>myQuery Demo</title>
+  <style>
+    .highlight { color: red; }
+    .scwrapper {
+      border: solid 10px black;
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <h1>Sub</h1>
+  <button id="subbtn">Click Me</button>
+  <ul>
+    <li>b</li>
+  </ul>
+  <input id="subin" value="2asdas" />
+  <span class="scwrapper">
+    <script src="../src/index.js" data-hide-selector=".scwrapper"></script>
+  </span>
+<script>
+    //$("#subin").val("");
+     //fmpooljs.enableLogging();
+
+     fmpooljs.enableLogging();
+     fmpooljs("#input").clear();
+     fmpooljs("#subin").clear();
+  </script>
+</body>
+</html>

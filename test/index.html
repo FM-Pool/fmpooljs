@@ -13,7 +13,7 @@
 
 <body>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="./fmpool.js"></script>
+  <script src="../src/index.js"></script>
   <h1>Hello World</h1>
   <button id="btn">Click Me</button>
   <ul>
@@ -28,24 +28,22 @@
     fmpooljs.enableLogging();
     fmpooljs.exposeToIframes();
     fmpooljs("#cinput").clear();
-    setTimeout(() => {
-      console.log("Delayed for 1 second.");
-      const iframe = document.createElement('iframe');
-iframe.src = './dyn_sub.html';
-document.body.appendChild(iframe);
-    }, 1000);
-    /*
-    console.log("fmpooljs global:", window.fmpooljs);
-    console.log([fmpooljs]);
     fmpooljs('#btn').readonly();
     fmpooljs.setSessionItem("counter", "1");
-    console.log(fmpooljs("ul li").countAmountOfElements());
     const comp = ((val) => val != '0');
     fmpooljs("#input").readonlyOnSessionCondition("counter", fmpooljs.unevenCompare('0'));
     fmpooljs.setSessionItem("counter", "1");
     fmpooljs("#input").readonlyOnSessionCondition("counter", fmpooljs.unevenCompare('0'));
     fmpooljs("#cinput").clear();
-    */
+    // for future updates
+/*
+    setTimeout(() => {
+      console.log("Delayed for 1 second.");
+      const iframe = document.createElement('iframe');
+        iframe.src = './dyn_sub.html';
+        document.body.appendChild(iframe);
+    }, 1000);
+*/
   </script>
 </body>
 
