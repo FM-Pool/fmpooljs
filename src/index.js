@@ -17,7 +17,6 @@
     const version = "0.0.4";
     const script = document.currentScript;
     const config = script?.dataset;
-    console.log(script, config);
 
     // --- Internal state ---
     let loggingEnabled = false;
@@ -25,23 +24,28 @@
     // --- Helper: controlled logger ---
     function log(...args) {
         if (loggingEnabled) {
-            if (args.length == 1 && (typeof args[0] === 'string' || args[0] instanceof String)) {
-                console.log("[fmpooljs] " + args);
-            } else {
-                console.log("[fmpooljs] ", [...args]);
-            }
+            print("log", args);
         }
     }
 
     function info(...args) {
-        console.log("[fmpooljs:info] " + args);
+        print("info", args);
+    }
+
+    function print(prefix, args) {
+        const logPrefix = `[fmpooljs:${prefix}] `
+        if (args.length == 1 && (typeof args[0] === 'string' || args[0] instanceof String)) {
+            console.log(logPrefix + args);
+        } else {
+            console.log(logPrefix, args);
+        }
     }
 
     // ===========================================================
     // 🔧 Shared Builder — defines everything once
     // ===========================================================
     function createFmpool(win, jq, frame) {
-        info("init version " + version, config?.hideClass);
+        info("init version " + version);
         log("createFmpool", win, jq, frame, win.location?.href, frame, config);
         const session = win.sessionStorage;
         let currentWindow = win;
@@ -50,8 +54,8 @@
             newWindow = frame;
         }
 
-        if(config?.hideSelector) {
-            log("Hiding selector", config?.hideSelector);
+        info(["Configurations: ", config]);
+        if (config?.hideSelector) {
             $(config.hideSelector).hide();
         }
 
@@ -117,21 +121,21 @@
                 return $el;
             };
 
-            $el.saveValueToStore = function(key) {
+            $el.saveValueToStore = function (key) {
                 const val = $el.val();
                 log("Save value to store:", key, val);
                 session.setItem(key, val);
                 return $el;
             }
 
-            $el.saveFieldValueToStore = function(key) {
+            $el.saveFieldValueToStore = function (key) {
                 const val = $el.find("input").val();
                 log("Save field value to store:", key, val);
                 session.setItem(key, val);
                 return $el;
             }
 
-            $el.clearOnSessionValueCondition = function(key, predict) {
+            $el.clearOnSessionValueCondition = function (key, predict) {
                 const value = session.getItem(key);
                 log("Check condition for clear value:", key, value, predict);
                 if (typeof predict === "function" ? predict(value) : value === predict) {
@@ -141,7 +145,7 @@
                 return $el;
             }
 
-            $el.prefillFromStore = function(key) {
+            $el.prefillFromStore = function (key) {
                 const value = session.getItem(key);
                 log("Prefill from store", key, value, $el);
                 $el.fillAutoCompleteTextField(value);
