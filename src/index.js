@@ -15,6 +15,9 @@
 
     //
     const version = "0.0.4";
+    const script = document.currentScript;
+    const config = script?.dataset;
+    console.log(script, config);
 
     // --- Internal state ---
     let loggingEnabled = false;
@@ -38,13 +41,18 @@
     // 🔧 Shared Builder — defines everything once
     // ===========================================================
     function createFmpool(win, jq, frame) {
-        info("init version " + version);
-        log("createFmpool", win, jq, frame, win.location?.href, frame);
+        info("init version " + version, config?.hideClass);
+        log("createFmpool", win, jq, frame, win.location?.href, frame, config);
         const session = win.sessionStorage;
         let currentWindow = win;
         let newWindow = null;
         if (frame !== undefined) {
             newWindow = frame;
+        }
+
+        if(config?.hideSelector) {
+            log("Hiding selector", config?.hideSelector);
+            $(config.hideSelector).hide();
         }
 
         function fmpooljs(selector, context) {

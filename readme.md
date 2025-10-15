@@ -4,6 +4,12 @@
 
 ### 1. Build und Release auf GitHub
 
+Automatisiert mit folgendem Befehl:
+
+```bash
+npm run release x.y.z
+```
+
 #### 1️⃣ Build erstellen
 
 Führe folgenden Befehl im Projektverzeichnis aus, um die minimierte Datei `dist/fmpooljs.min.js` zu erzeugen:
@@ -31,3 +37,19 @@ git push origin main --follow-tags
 5. Klicke auf “Publish release”.
 
 Release verfügbar unter: https://cdn.jsdelivr.net/gh/FM-Pool/fmpooljs@v0.0.1/dist/fmpooljs.min.js
+
+### 4️⃣ Immer aktuelle Version (latest)
+
+Damit Nutzer deiner Webseite oder Anwendung **immer automatisch die neueste stabile Version** von `fmpooljs` erhalten, kannst du jsDelivr so konfigurieren, dass es die aktuellste Version über einen speziellen `latest`-Tag lädt.
+
+---
+
+#### 1️⃣ „Latest“-Tag manuell aktualisieren
+
+Nach jedem neuen Release (z. B. `v0.0.2`) kannst du den Git-Tag `latest` auf die aktuelle Version verschieben:
+
+```bash
+git tag -d latest
+git push origin :refs/tags/latest
+git tag latest
+git push origin latest
