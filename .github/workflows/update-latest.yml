@@ -24,7 +24,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --tags
           git tag -fa latest -m "Latest release (auto)"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FM-Pool/fmpooljs.git --force latest
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FM-Pool/fmpooljs.git
+          git push origin --force latest
           echo "✅ Tag 'latest' erfolgreich aktualisiert."
 
       - name: 🌍 Purge jsDelivr Cache (zweimal)
