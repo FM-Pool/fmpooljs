@@ -1,6 +1,6 @@
 {
   "name": "fmpooljs",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "description": "fmpooljs for Planon.",
   "main": "dist/fmpooljs.min.js",
