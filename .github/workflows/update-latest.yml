@@ -15,8 +15,7 @@ jobs:
       - name: 🧾 Repository auschecken
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0       # alle Tags verfügbar machen
-          token: ${{ secrets.GITHUB_TOKEN }}  # Token direkt für Pushes verwenden
+          fetch-depth: 0  # alle Tags verfügbar
 
       - name: 🏷️ Move 'latest' tag to current commit
         run: |
@@ -25,8 +24,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --tags
           git tag -fa latest -m "Latest release (auto)"
+          # Remote auf HTTPS mit PAT setzen
+          git remote set-url origin https://$PAT_GITHUB@github.com/FM-Pool/fmpooljs.git
           git push origin --force latest
           echo "✅ Tag 'latest' erfolgreich aktualisiert."
+        env:
+          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
 
       - name: 🌍 Purge jsDelivr Cache (zweimal)
         run: |
