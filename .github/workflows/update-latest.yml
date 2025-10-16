@@ -15,7 +15,8 @@ jobs:
       - name: 🧾 Repository auschecken
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # wichtig, damit alle Tags verfügbar sind
+          fetch-depth: 0       # alle Tags verfügbar machen
+          token: ${{ secrets.GITHUB_TOKEN }}  # Token direkt für Pushes verwenden
 
       - name: 🏷️ Move 'latest' tag to current commit
         run: |
@@ -24,7 +25,6 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --tags
           git tag -fa latest -m "Latest release (auto)"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FM-Pool/fmpooljs.git
           git push origin --force latest
           echo "✅ Tag 'latest' erfolgreich aktualisiert."
 
