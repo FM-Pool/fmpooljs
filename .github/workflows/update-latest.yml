@@ -3,11 +3,12 @@ name: Update jsDelivr latest tag
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   update-latest:
-    if: contains(github.event.head_commit.message, 'build: release')
+    if: >
+      contains(github.event.head_commit.message, 'build: release')
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +27,7 @@ jobs:
           git push origin -f latest
           echo "✅ Tag 'latest' erfolgreich aktualisiert."
 
-      - name: 🌍 Purge jsDelivr Cache (twice)
+      - name: 🌍 Purge jsDelivr Cache (zweimal)
         run: |
           echo "Leere jsDelivr Cache..."
           curl -s "https://purge.jsdelivr.net/gh/FM-Pool/fmpooljs@latest/dist/fmpooljs.min.js"
