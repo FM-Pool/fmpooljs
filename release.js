@@ -99,7 +99,7 @@ try {
   run("git add -A");
   run(`git commit -m "build: release v${version}" || echo 'Keine Änderungen zu committen'`);
   run(`git tag -a v${version} -m "Release v${version}"`);
-  run("git tag -f -a latest -m 'Latest release'");
+  run('git tag -fa latest -m "Latest release"');
   run("git push origin main");
   run(`git push origin v${version}`);
   run("git push origin -f latest");
