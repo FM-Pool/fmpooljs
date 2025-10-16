@@ -1,0 +1,35 @@
+name: Update jsDelivr latest tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-latest:
+    if: contains(github.event.head_commit.message, 'build: release')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Repository auschecken
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # wichtig, damit alle Tags verfügbar sind
+
+      - name: 🏷️ Move 'latest' tag to current commit
+        run: |
+          echo "Aktualisiere Git-Tag 'latest'..."
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch --tags
+          git tag -fa latest -m "Latest release (auto)"
+          git push origin -f latest
+          echo "✅ Tag 'latest' erfolgreich aktualisiert."
+
+      - name: 🌍 Purge jsDelivr Cache (twice)
+        run: |
+          echo "Leere jsDelivr Cache..."
+          curl -s "https://purge.jsdelivr.net/gh/FM-Pool/fmpooljs@latest/dist/fmpooljs.min.js"
+          sleep 20
+          curl -s "https://purge.jsdelivr.net/gh/FM-Pool/fmpooljs@latest/dist/fmpooljs.min.js"
+          echo "✅ jsDelivr Cache erfolgreich geleert."
