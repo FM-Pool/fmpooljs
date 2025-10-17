@@ -14,7 +14,7 @@
     }
 
     //
-    const version = "0.1.3-SNAPSHOT";
+    const version = "0.1.3.0-SNAPSHOT";
     const script = document.currentScript;
     const config = script?.dataset;
 
@@ -136,6 +136,14 @@
                 log("Save field value to store:", key, val);
                 session.setItem(key, val);
                 return $el;
+            }
+
+            $el.getFieldValue = function(){
+                let val = $el.find("input").val();
+                if(val === undefined) {
+                    val = $el.find(".pss_field_value").text().trim();
+                }
+                return val;
             }
 
             $el.clearOnSessionValueCondition = function (key, predict) {
