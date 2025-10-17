@@ -14,7 +14,7 @@
     }
 
     //
-    const version = "0.1.2";
+    const version = "0.1.3-SNAPSHOT";
     const script = document.currentScript;
     const config = script?.dataset;
 
