@@ -129,7 +129,10 @@
             }
 
             $el.saveFieldValueToStore = function (key) {
-                const val = $el.find("input").val();
+                let val = $el.find("input").val();
+                if(val === undefined) {
+                    val = $el.find(".pss_field_value").text().trim();
+                }
                 log("Save field value to store:", key, val);
                 session.setItem(key, val);
                 return $el;
