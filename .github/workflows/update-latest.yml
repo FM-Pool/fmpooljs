@@ -7,26 +7,31 @@ on:
 
 jobs:
   update-latest:
-    if: contains(github.event.head_commit.message, 'build: release')
+    if: >
+      contains(github.event.head_commit.message, 'build: release')
     runs-on: ubuntu-latest
 
     steps:
       - name: 🧾 Repository auschecken
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # wichtig, damit alle Tags verfügbar sind
+          fetch-depth: 0
+          persist-credentials: false  # keine alten GitHub-Actions-Credentials
 
       - name: 🏷️ Move 'latest' tag to current commit
+        env:
+          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
         run: |
           echo "Aktualisiere Git-Tag 'latest'..."
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --tags
           git tag -fa latest -m "Latest release (auto)"
-          git push origin -f latest
+          git remote set-url origin https://$PAT_GITHUB@github.com/FM-Pool/fmpooljs.git
+          git push origin --force latest
           echo "✅ Tag 'latest' erfolgreich aktualisiert."
 
-      - name: 🌍 Purge jsDelivr Cache (twice)
+      - name: 🌍 Purge jsDelivr Cache (zweimal)
         run: |
           echo "Leere jsDelivr Cache..."
           curl -s "https://purge.jsdelivr.net/gh/FM-Pool/fmpooljs@latest/dist/fmpooljs.min.js"
