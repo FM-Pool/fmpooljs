@@ -1,25 +1,39 @@
 # fmpooljs
 
+## Usage
+
+The script can be included with the following syntax:
+
+``` html
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/FM-Pool/fmpooljs@stable/dist/fmpooljs.min.js" data-hide-selector=".pss_helptext"></script>
+``` 
+
+The `data-hide-selector`can be used to directly hide hide the parent HTML tags for example, when the script is included via `help text` in Planon.
+
 ## Development
 
-### 1. Build und Release auf GitHub
+Available versions are release at [jsdelivr](https://www.jsdelivr.com/package/gh/FM-Pool/fmpooljs?tab=files&version=stable).
 
-Automatisiert mit folgendem Befehl:
+[![](https://data.jsdelivr.com/v1/package/gh/FM-Pool/fmpooljs/badge)](https://www.jsdelivr.com/package/gh/FM-Pool/fmpooljs)
+
+### Build and Release on GitHub
+
+Automated with the following command:
 
 ```bash
 npm run release x.y.z
 ```
 
-#### 1️⃣ Build erstellen
+#### 1️⃣ Create build
 
-Führe folgenden Befehl im Projektverzeichnis aus, um die minimierte Datei `dist/fmpooljs.min.js` zu erzeugen:
+Run the following command in the project directory to generate the minified file `dist/fmpooljs.min.js`:
 
 ```bash
 npm install
 npm run build
 ```
 
-#### 2️⃣ Änderungen committen und Version taggen
+#### 2️⃣ Commit changes and tag the version
 
 ```bash
 git add .
@@ -28,28 +42,51 @@ git tag v0.0.1
 git push origin main --follow-tags
 ```
 
-#### 3️⃣ GitHub Release veröffentlichen
+#### 3️⃣ Publish GitHub release
 
-1. Öffne dein Repository auf GitHub.
-2. Gehe zu Releases → “Draft a new release”.
-3. Wähle den eben erstellten Tag v0.0.1 aus.
-4. Gib optional einen Titel und eine Beschreibung ein.
-5. Klicke auf “Publish release”.
+1. Open your repository on GitHub.
+2. Go to Releases → “Draft a new release”.
+3. Select the newly created tag v0.0.1.
+4. Optionally, enter a title and description.
+5. Click “Publish release”.
 
-Release verfügbar unter: https://cdn.jsdelivr.net/gh/FM-Pool/fmpooljs@v0.0.1/dist/fmpooljs.min.js
+Release available at: https://cdn.jsdelivr.net/gh/FM-Pool/fmpooljs@stable/dist/fmpooljs.min.js
 
-### 4️⃣ Immer aktuelle Version (latest)
+### 4️⃣ Always up-to-date version (latest)
 
-Damit Nutzer deiner Webseite oder Anwendung **immer automatisch die neueste stabile Version** von `fmpooljs` erhalten, kannst du jsDelivr so konfigurieren, dass es die aktuellste Version über einen speziellen `latest`-Tag lädt.
+To ensure that users of your website or application **always automatically receive the latest stable version** of `fmpooljs`, you can configure jsDelivr to load the most recent version using a special `latest` tag.
+
+***<span style="background-color:red;color:black">
+TODO: There is a problem with the latest tag and it does not update. For now use tag `stable`.
+</span>***
 
 ---
 
-#### 1️⃣ „Latest“-Tag manuell aktualisieren
+#### 1️⃣ Manually update the “latest” tag
 
-Nach jedem neuen Release (z. B. `v0.0.2`) kannst du den Git-Tag `latest` auf die aktuelle Version verschieben:
+After each new release (e.g. `v0.0.2`), you can move the Git tag `latest` to point to the current version:
 
 ```bash
 git tag -d latest
 git push origin :refs/tags/latest
 git tag latest
 git push origin latest
+```
+
+### Create documentation
+
+``` bash
+npm run docs
+```
+
+#### Need packages
+
+``` bash
+npm install --save-dev jsdoc
+
+npm install --save-dev minami
+
+npm install --save-dev taffydb
+```
+
+

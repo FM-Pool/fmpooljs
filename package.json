@@ -6,10 +6,14 @@
   "main": "dist/fmpooljs.min.js",
   "scripts": {
     "build": "rollup -c",
-    "release": "node release.js"
+    "release": "node release.js",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "rollup": "^3.29.4"
+    "jsdoc": "^4.0.5",
+    "minami": "^1.2.3",
+    "rollup": "^3.29.4",
+    "taffydb": "^2.7.3"
   }
 }
