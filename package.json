@@ -7,11 +7,12 @@
   "scripts": {
     "build": "rollup -c",
     "release": "node release.js",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc2md src/**/*.js > docs/README.md"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "jsdoc": "^4.0.5",
+    "jsdoc-to-markdown": "^9.1.3",
     "minami": "^1.2.3",
     "rollup": "^3.29.4",
     "taffydb": "^2.7.3"

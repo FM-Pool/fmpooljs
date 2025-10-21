@@ -10,6 +10,8 @@ The script can be included with the following syntax:
 
 The `data-hide-selector`can be used to directly hide hide the parent HTML tags for example, when the script is included via `help text` in Planon.
 
+Documentation of function can be found in the [docs folder](/docs/README.md).
+
 ## Development
 
 Available versions are release at [jsdelivr](https://www.jsdelivr.com/package/gh/FM-Pool/fmpooljs?tab=files&version=stable).
@@ -87,6 +89,9 @@ npm install --save-dev jsdoc
 npm install --save-dev minami
 
 npm install --save-dev taffydb
+
+npm install --save-dev jsdoc-to-markdown
+
 ```
 
 
