@@ -44,6 +44,14 @@
     // ===========================================================
     // 🔧 Shared Builder — defines everything once
     // ===========================================================
+    /**
+     * @module sharedBuilder
+     * @desc shared builder to create fmpooljs instance.
+     * @param {*} win browser windwo
+     * @param {*} jq jquery
+     * @param {*} frame optional: current frame
+     * @returns fmpooljs object
+     */
     function createFmpool(win, jq, frame) {
         info("init version " + version);
         log("createFmpool", win, jq, frame, win.location?.href, frame, config);
@@ -59,6 +67,13 @@
             $(config.hideSelector).hide();
         }
 
+        /**
+         * @module fmpooljs
+         * @desc fmpooljs uses jquery to select elements from the DOM.
+         * @param {string} selector - CSS selector
+         * @param {*} context - Contex
+         * @returns fmpooljs object
+         */
         function fmpooljs(selector, context) {
             if (newWindow != null) {
                 log("reinit", newWindow, frame, currentWindow.location?.href, newWindow.location.href);
@@ -72,6 +87,14 @@
             log("Selected elements:", selector, $el, win.location?.href);
 
             // --- Element-level methods ---
+
+            /** 
+             * @function readonly
+             * @access public
+             * @summary Sets field to readonly
+             * @desc Works only with fields which are configured with "Allowed select actions: 'Pop-up and autosuggest'"
+             * @returns fmpooljs object
+             */
             $el.readonly = function () {
                 var fieldWrapper = this;
                 var input = this.find("input");
@@ -91,18 +114,37 @@
                 return $el;
             };
 
+            /**
+             * @function clear
+             * @access public
+             * @summary Empties an input field
+             * @returns fmpooljs
+             */
             $el.clear = function () {
                 $el.val("");
                 log("Cleared element(s):", $el);
                 return $el;
             };
 
+            /** 
+             * @function countAmountOfElements
+             * @access public
+             * @summary counts elements of given selector
+             * @returns amount of elements
+             */
             $el.countAmountOfElements = function () {
                 const len = this.length;
                 log("Counted elements:", len);
                 return len;
             };
 
+            /**
+             * @function saveAmountIfElementsToSession
+             * @access public
+             * @summary saves the amount of elements to a session variable
+             * @param {String} key name of the session variable
+             * @returns fmpooljs object
+             */
             $el.saveAmountIfElementsToSession = function (key) {
                 const val = this.countAmountOfElements();
                 session.setItem(key, val);
@@ -110,6 +152,15 @@
                 return $el;
             };
 
+            
+            /**
+             * @function readonlyOnSessionCondition
+             * @access public
+             * @summary Compares the value of the session storage to a given predict and set the element readonly when condition is met.
+             * @param {String} key Key of session to of the value to read
+             * @param {Function} predict Function for comparison
+             * @returns fmpooljs object
+             */
             $el.readonlyOnSessionCondition = function (key, predict) {
                 const value = session.getItem(key);
                 if (typeof predict === "function" ? predict(value) : value === predict) {
@@ -121,6 +172,13 @@
                 return $el;
             };
 
+            /**
+             * @function saveValueToStore
+             * @access public
+             * @summary save the input value of the element into the session storage
+             * @param {String} key key of the session storage
+             * @returns fmpooljs object
+             */
             $el.saveValueToStore = function (key) {
                 const val = $el.val();
                 log("Save value to store:", key, val);
@@ -128,6 +186,13 @@
                 return $el;
             }
 
+            /**
+             * @function saveFieldValueToStore
+             * @access public
+             * @summary saves the value of the current selected field to the given session storage
+             * @param {String} key key of the session storage
+             * @returns fmpooljs object
+             */
             $el.saveFieldValueToStore = function (key) {
                 let val = $el.find("input").val();
                 if(val === undefined) {
@@ -138,6 +203,12 @@
                 return $el;
             }
 
+            /**
+             * @function getFieldValue
+             * @access public
+             * @summary gets the value of the input within the selector.
+             * @returns value of the input field
+             */
             $el.getFieldValue = function(){
                 let val = $el.find("input").val();
                 if(val === undefined) {
@@ -146,6 +217,14 @@
                 return val;
             }
 
+            /**
+             * @function clearOnSessionValueCondition
+             * @access public
+             * @summary Clears input field when predict for value of given session storage key validates to true.
+             * @param {String} key key of the session storage
+             * @param {Function} predict compare function
+             * @returns fmpooljs object
+             */
             $el.clearOnSessionValueCondition = function (key, predict) {
                 const value = session.getItem(key);
                 log("Check condition for clear value:", key, value, predict);
@@ -156,6 +235,13 @@
                 return $el;
             }
 
+            /**
+             * @function prefillFromStore
+             * @access public
+             * @summary prefills field from storage and uses fillAutoCompleteTextField function
+             * @param {String} key key of session storage
+             * @returns fmpooljs object
+             */
             $el.prefillFromStore = function (key) {
                 const value = session.getItem(key);
                 log("Prefill from store", key, value, $el);
@@ -167,23 +253,55 @@
         }
 
         // --- Static helpers ---
+        /**
+         * @function setSessionItem
+         * @access public
+         * @static
+         * @summary set value into session storage
+         * @param {String} key key of session storage
+         * @param {String} val value of session storage
+         */
         fmpooljs.setSessionItem = function (key, val) {
             session.setItem(key, val);
             log("Session item set:", key, "=", val);
         };
 
+        /**
+         * @function getSessionItem
+         * @access public
+         * @static
+         * @summary save value to session storage
+         * @param {*} key key of session storage
+         * @returns value of session storage
+         */
         fmpooljs.getSessionItem = function (key) {
             const value = session.getItem(key);
             log("Session item get:", key, "=", value);
             return value;
         };
 
+        /**
+         * @function unevenCompare
+         * @access public
+         * @static
+         * @summary returns a function for uneven comparison
+         * @param {*} value value to compare with
+         * @returns function
+         */
         fmpooljs.unevenCompare = function (value) {
             const func = (el) => el != value;
             log("unevenCompare created:", func);
             return func;
         };
 
+        /**
+         * @function evenCompare
+         * @access public
+         * @static
+         * @summary returns a function for even comparison
+         * @param {*} value value to compare with
+         * @returns function
+         */
         fmpooljs.evenCompare = function (value) {
             const func = (el) => el == value;
             log("evenCompare created:", func);
@@ -191,11 +309,23 @@
         };
 
         // --- Logging controls ---
+        /**
+         * @function enableLogging
+         * @access public
+         * @static
+         * @summary activats logging
+         */
         fmpooljs.enableLogging = function () {
             loggingEnabled = true;
             log("Logging enabled");
         };
 
+        /**
+         * @function disableLogging
+         * @access public
+         * @static
+         * @summary deactivats logging
+         */
         fmpooljs.disableLogging = function () {
             loggingEnabled = false;
             log("Logging disabled");
