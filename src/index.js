@@ -369,8 +369,11 @@
          * @summary hides the parent element where the script is added. The selector is given in the data-hide-selector attribute of the script tag
          */
         fmpooljs.hideParent = function() {
+            log("hideParent: ", config?.hideSelector);
             if (config?.hideSelector) {
-                $(config.hideSelector).hide();
+                let element = $(config.hideSelector);
+                log("found selector: ", element);
+                element.hide();
             }
         };
 
