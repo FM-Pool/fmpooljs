@@ -13,7 +13,10 @@
 
 <body>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="../src/index.js"></script>
+    <div class="script-parent">
+        <h2>This is script parent</h2>
+        <script src="../src/index.js" data-hide-selector=".script-parent"></script>
+    </div>
     <div class="content">
         <div class="acc">
             <h2>ACC</h2>
@@ -75,6 +78,7 @@
             window.location.search = urlParams;
         }
         fmpooljs.enableLogging();
+        fmpooljs.hideParent();
         testButton(".acc");
         testButton(".prod");
 
