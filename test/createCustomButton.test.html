@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Custom Button Test</title>
+    <style>
+        .highlight {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../src/index.js"></script>
+    <div class="content">
+        <div class="acc">
+            <h2>ACC</h2>
+            <div id="id6ef"
+                class="pss_integer pss_fieldtype_detailfield pss_field pss_baseorder pss_fieldname_freeinteger1 pss_rfc_field pss_readonly ">
+
+                <label class="pss_field_label pss_readonly" for="id6f0">Quality review order</label>
+                <div class="pss_field_info_button" aria-hidden="true" role="none" style="display:none;"></div>
+
+                <div class="pss_entry_editor">
+                    <div class="pss_field_value">
+                        <textarea class="pss_read_only_editor"
+                            name="buildingBlocks:inlineBuildingBlocks:block1:form:fieldRepeater:4:field:fieldContent:field-editor:textfield"
+                            id="id6f0" onfocus="this.setSelectionRange(this.value.length, this.value.length);"
+                            aria-readonly="true" readonly="readonly" role="textbox"
+                            aria-multiline="false">9233.00, Controllo qualità in condivisione / Gemeinsame Qualitätskontrolle</textarea>
+                    </div>
+                </div>
+                <wicket:container id="id719" hidden="" data-wicket-placeholder=""></wicket:container>
+            </div>
+        </div>
+        <div class="prod">
+            <h2>Prod</h2>
+
+            <div id="id412"
+                class="pss_integer pss_fieldtype_detailfield pss_field pss_baseorder pss_fieldname_freeinteger1 pss_rfc_field pss_readonly ">
+
+                <label class="pss_field_label pss_readonly" for="id433">Quality review order</label>
+                <div class="pss_field_info_button" aria-hidden="true" role="none" style="display:none;"></div>
+
+                <div class="pss_entry_editor">
+
+                    <div class="pss_field_value">
+                        <input class="pss_read_only_editor" type="text"
+                            value="12264.00, Controllo qualità in condivisione / Gemeinsame Qualitätskontrolle"
+                            name="buildingBlocks:inlineBuildingBlocks:block1:form:fieldRepeater:4:field:fieldContent:field-editor:textfield"
+                            id="id433" onfocus="this.setSelectionRange(this.value.length, this.value.length);"
+                            aria-readonly="true" readonly="readonly">
+                    </div>
+
+                </div>
+                <wicket:container id="id434" hidden="" data-wicket-placeholder=""></wicket:container>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="pss_page_bottom_buttonbar">
+        <h2>Expected Button</h2>
+    </div>
+
+
+    <script>
+        // Prepare URL for better testing
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('param', 'case');
+        if (!window.location.search.includes('case')) {
+            window.location.search = urlParams;
+        }
+        fmpooljs.enableLogging();
+        testButton(".acc");
+        testButton(".prod");
+
+        function testButton(preslector) {
+            let numberText = fmpooljs(preslector + " .pss_fieldname_freeinteger1").getFieldValue();
+            let orderNumber = numberText.split(',')[0];
+            let url = fmpooljs.buildUrl("case/BP/MK_WOR_02_java_SABES?ORDER_NR1=" + orderNumber);
+            fmpooljs.createCustomButton('Visualizza Report', url, ".pss_page_bottom_buttonbar");
+        }
+        
+    </script>
+</body>
+
+</html>
