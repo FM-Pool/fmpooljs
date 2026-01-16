@@ -210,10 +210,15 @@
              * @returns value of the input field
              */
             $el.getFieldValue = function(){
-                let val = $el.find("input").val();
+                let inputField = $el.find("input");
+                log("Try find input field", inputField);
+                let val = inputField.val();
                 if(val === undefined) {
-                    val = $el.find(".pss_field_value").text().trim();
+                    let textField = $el.find(".pss_field_value");
+                    log("Try find text field", textField);
+                    val = textField.text().trim();
                 }
+                log("Found Field Value: " + val);
                 return val;
             }
 
@@ -307,6 +312,71 @@
             log("evenCompare created:", func);
             return func;
         };
+
+        /**
+         * @function createCustomButton
+         * @access public
+         * @static
+         * @summary Adds a button with a link to an element
+         * @param {*} text the text of the button
+         * @param {*} link the link the button goes to
+         * @param {*} targetSelector the selector where the button is added
+         */
+        fmpooljs.createCustomButton = function(text, link, targetSelector) {
+            log("createCustomButton:", text, link, targetSelector);
+            var addButton = `<div class='customAddContainer'>
+                <a target='_blank' href='${link}' class='pss_button add_button pss_action'><span><b>${text}</b></span></a>
+            </div>`;
+            fmpooljs(targetSelector).append(addButton);
+            $(".customAddContainer").css({" margin-top":"-36px","text-align":"center"});
+            var a_href = $(".customAddContainer a").attr('href');
+            log("link set to: ", a_href);
+        };
+
+        /**
+         * @function getEnvoirmentUrl
+         * @access public
+         * @static
+         * @summary retuns the current url
+         * @returns url of the envoirment
+         */
+        fmpooljs.getEnvoirmentUrl = function() {
+            var url = location.href;
+            log("getEnvoirmentUrl -> current url" + url);
+            var environmentUrl = url.substring(0, url.indexOf('case'));
+            log("getEnvoirmentUrl: " + environmentUrl);
+            return environmentUrl;
+        };
+
+        /**
+         * @function buildUrl
+         * @access public
+         * @static
+         * @summary builds an url of the current envoirment
+         * @param {*} path the second path of the url
+         * @returns url
+         */
+        fmpooljs.buildUrl = function(path) {
+            var url = fmpooljs.getEnvoirmentUrl() + path;
+            log("buildUrl: " + url);
+            return url;
+        };
+
+        /**
+         * @function hideParent
+         * @access public
+         * @static
+         * @summary hides the parent element where the script is added. The selector is given in the data-hide-selector attribute of the script tag
+         */
+        fmpooljs.hideParent = function() {
+            log("hideParent: ", config?.hideSelector);
+            if (config?.hideSelector) {
+                let element = $(config.hideSelector);
+                log("found selector: ", element);
+                element.hide();
+            }
+        };
+
 
         // --- Logging controls ---
         /**

@@ -41,6 +41,10 @@ fmpooljs uses jquery to select elements from the DOM.
         * [.getSessionItem(key)](#module_fmpooljs.getSessionItem) ⇒
         * [.unevenCompare(value)](#module_fmpooljs.unevenCompare) ⇒
         * [.evenCompare(value)](#module_fmpooljs.evenCompare) ⇒
+        * [.createCustomButton(text, link, targetSelector)](#module_fmpooljs.createCustomButton)
+        * [.getEnvoirmentUrl()](#module_fmpooljs.getEnvoirmentUrl) ⇒
+        * [.buildUrl(path)](#module_fmpooljs.buildUrl) ⇒
+        * [.hideParent()](#module_fmpooljs.hideParent)
         * [.enableLogging()](#module_fmpooljs.enableLogging)
         * [.disableLogging()](#module_fmpooljs.disableLogging)
     * _inner_
@@ -103,6 +107,44 @@ fmpooljs uses jquery to select elements from the DOM.
 | --- | --- | --- |
 | value | <code>\*</code> | value to compare with |
 
+<a name="module_fmpooljs.createCustomButton"></a>
+
+### fmpooljs.createCustomButton(text, link, targetSelector)
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: Adds a button with a link to an element  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| text | <code>\*</code> | the text of the button |
+| link | <code>\*</code> | the link the button goes to |
+| targetSelector | <code>\*</code> | the selector where the button is added |
+
+<a name="module_fmpooljs.getEnvoirmentUrl"></a>
+
+### fmpooljs.getEnvoirmentUrl() ⇒
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: retuns the current url  
+**Returns**: url of the envoirment  
+**Access**: public  
+<a name="module_fmpooljs.buildUrl"></a>
+
+### fmpooljs.buildUrl(path) ⇒
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: builds an url of the current envoirment  
+**Returns**: url  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>\*</code> | the second path of the url |
+
+<a name="module_fmpooljs.hideParent"></a>
+
+### fmpooljs.hideParent()
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: hides the parent element where the script is added. The selector is given in the data-hide-selector attribute of the script tag  
+**Access**: public  
 <a name="module_fmpooljs.enableLogging"></a>
 
 ### fmpooljs.enableLogging()
