@@ -19,8 +19,25 @@
     const config = script?.dataset;
 
     let colorPerStatus = [
-        { color: '#00ff00', status: ['Analyse issue']},
-        { color: '#0000ff', status: ['Assigned']},
+        { color: '#750000', status: ['Rejected', 'Abgelehnt',  'Rifiutato']},
+        { color: '#FF8A8A', status: ['Reported', 'Gemeldet', 'Segnalato']},
+        { color: '#5C5CFF', status: ['Approved', 'Genehmigt', 'Approvato', 'Erledigt']},
+        { color: '#2E2EFF', status: ['Accepted', 'Akzeptiert',  'Accettato']},
+        { color: '#0000D1', status: ['Analyse issue', 'Analyse der Meldung',  'Analisi richista']},
+        { color: '#000075', status: ['In progress', 'Im Gange', 'In corso', 'In Bearbeitung', 'In lavorazione']},
+        { color: '#FFD700', status: ['In review ACC', 'Prüfung in ACC',  'Verifica in ACC']},
+        { color: '#D1B200', status: ['In review PROD', 'Prüfung in PROD',  'Verifica in PROD']},
+        { color: '#473D00', status: ['Migration to PROD', 'Migration nach PROD',  'Migrazione in PROD']},
+        { color: '#FFB8FF', status: ['Assigned', 'Beauftragt',  'Assegnato']},
+        { color: '#FF5CFF', status: ['Waiting on customer (Request)', 'Warten auf den Kunden (Meldung)', 'In attesa del cliente (Richiesta)']},
+        { color: '#FF00FF', status: ['Waiting on customer', 'Warten auf den Kunden',  'In attesa del cliente']},
+        { color: '#470047', status: ['Waiting on supplier', 'Warten auf den Lieferant',  'In attesa del fornitore']},
+        { color: '#470047', status: ['On hold', 'In der Warteschleife',  'In attesa']},
+        { color: '#2EFF2E', status: ['Temporary Fix', 'Provisorische Reparatur',  'Correzione temporanea']},
+        { color: '#00D100', status: ['Administratively completed', 'Administrativ abgeschlossen',  'Completato a livello amministrativo']},
+        { color: '#008000', status: ['Technically completed', 'Technisch abgeschlossen',  'Completato a livello tecnico']},
+        { color: '#004700', status: ['Completed', 'Abgeschlossen', 'Completato', 'Erledigt']},
+        { color: '#000000', status: ['Cancelled', 'Storniert', 'Zurückgenommen', 'Annullato']},
     ];
 
     // --- Internal state ---
@@ -254,25 +271,32 @@
                 return $el;
             }
 
+            /**
+             * @function setStandardStatusColor
+             * @access public
+             * @summary set colors for datasets according to color definition
+             * @returns fmpooljs object
+             */
             $el.setStandardStatusColor = function() {
-                // todo for each
                 log("setStandardStatusColor", $el);
-                var chart = $el[0].FusionCharts;
-                var data = chart.getChartData('json')
-                log("data set", data);
-                //data.dataset[0].color = '#000000';
-                data.dataset.forEach(setColorPerDataset);
-                chart.setChartData(data, 'json');
-                
+                for(var eleIdx = 0; eleIdx < $el.length; eleIdx++){
+                    var element = $el[eleIdx];
+                    if(element.hasOwnProperty('FusionCharts')){
+                        var chart = element.FusionCharts;
+                        var data = chart.getChartData('json');
+                        data.dataset.forEach(setColorPerDataset);
+                        log("set colors", chart, data);
+                        chart.setChartData(data, 'json');
+                    }
+                }   
+                return $el;         
             }
 
             function setColorPerDataset(dateElement){
-                log("setColorPerDataset", dateElement, colorPerStatus);
                 for(var colorIdx = 0; colorIdx < colorPerStatus.length; colorIdx++){
                     var colorPerStatusEntry = colorPerStatus[colorIdx];
                     for(var statusIdx = 0; statusIdx < colorPerStatusEntry.status.length; statusIdx++) {
                         let statusName = colorPerStatus[colorIdx].status[statusIdx];
-                        log("setColorPerDataset compare", statusName, dateElement.seriesname)
                         if(statusName == dateElement.seriesname){
                             dateElement.color = colorPerStatus[colorIdx].color;
                         }

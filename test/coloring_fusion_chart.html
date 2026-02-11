@@ -17,60 +17,305 @@
                 dataFormat: 'json',
                 dataSource: {
                     "chart": {
-                        "caption": "Revenue split by product category",
-                        "subCaption": "For current year",
-                        "xAxisname": "Quarter",
-                        "yAxisName": "Revenues (In USD)",
+                        "caption": "Total number of pending orders",
+                        "subCaption": "",
+                        "xAxisname": "Trade group",
+                        "yAxisName": "No. of orders",
                         "showSum": "1",
-                        "numberPrefix": "$",
+                        "numberPrefix": "",
                         "theme": "fusion"
                     },
 
                     "categories": [{
                         "category": [{
-                            "label": "Q1"
+                            "label": "Question"
                         }, {
-                            "label": "Q2"
+                            "label": "Idea"
                         }, {
-                            "label": "Q3"
+                            "label": "Platform malfunction"
                         }, {
-                            "label": "Q4"
+                            "label": "Support Requests"
                         }]
                     }],
 
                     "dataset": [{
                         "seriesname": "Analyse issue",
                         "data": [{
-                            "value": "11000"
+                            "value": "2"
                         }, {
-                            "value": "15000"
+                            "value": "4"
                         }, {
-                            "value": "13500"
+                            "value": "12"
                         }, {
-                            "value": "15000"
+                            "value": "1"
                         }]
                     }, {
                         "seriesname": "Assigned",
                         "data": [{
-                            "value": "11400"
+                            "value": "5"
                         }, {
-                            "value": "14800"
+                            "value": "2"
                         }, {
-                            "value": "8300"
+                            "value": "7"
                         }, {
-                            "value": "11800"
+                            "value": "8"
+                        }]
+                    }, {
+                        "seriesname": "Cancelled",
+                        "data": [{
+                            "value": "6"
+                        }, {
+                            "value": "1"
+                        }, {
+                            "value": "1"
+                        }, {
+                            "value": "3"
+                        }]
+                    }, {
+                        "seriesname": "Completed",
+                        "data": [{
+                            "value": "5"
+                        }, {
+                            "value": "5"
+                        }, {
+                            "value": "6"
+                        }, {
+                            "value": "1"
+                        }]
+                    }, {
+                        "seriesname": "Approved",
+                        "data": [{
+                            "value": "9"
+                        }, {
+                            "value": "2"
+                        }, {
+                            "value": "3"
+                        }, {
+                            "value": "11"
+                        }]
+                    }, {
+                        "seriesname": "In progress",
+                        "data": [{
+                            "value": "3"
+                        }, {
+                            "value": "8"
+                        }, {
+                            "value": "9"
+                        }, {
+                            "value": "12"
+                        }]
+                    }, {
+                        "seriesname": "Waiting on customer (Request)",
+                        "data": [{
+                            "value": "2"
+                        }, {
+                            "value": "5"
+                        }, {
+                            "value": "8"
+                        }, {
+                            "value": "13"
+                        }]
+                    }, {
+                        "seriesname": "Reported",
+                        "data": [{
+                            "value": "4"
+                        }, {
+                            "value": "8"
+                        }, {
+                            "value": "7"
+                        }, {
+                            "value": "2"
+                        }]
+                    }, {
+                        "seriesname": "Accepted",
+                        "data": [{
+                            "value": "1"
+                        }, {
+                            "value": "11"
+                        }, {
+                            "value": "6"
+                        }, {
+                            "value": "8"
+                        }]
+                    }, {
+                        "seriesname": "In review ACC",
+                        "data": [{
+                            "value": "3"
+                        }, {
+                            "value": "9"
+                        }, {
+                            "value": "5"
+                        }, {
+                            "value": "11"
+                        }]
+                    }, {
+                        "seriesname": "In review PROD",
+                        "data": [{
+                            "value": "3"
+                        }, {
+                            "value": "5"
+                        }, {
+                            "value": "7"
+                        }, {
+                            "value": "2"
+                        }]
+                    }, {
+                        "seriesname": "Migration to PROD",
+                        "data": [{
+                            "value": "3"
+                        }, {
+                            "value": "5"
+                        }, {
+                            "value": "7"
+                        }, {
+                            "value": "3"
+                        }]
+                    }, {
+                        "seriesname": "On hold",
+                        "data": [{
+                            "value": "1"
+                        }, {
+                            "value": "9"
+                        }, {
+                            "value": "4"
+                        }, {
+                            "value": "6"
+                        }]
+                    }, {
+                        "seriesname": "Temporary Fix",
+                        "data": [{
+                            "value": "2"
+                        }, {
+                            "value": "5"
+                        }, {
+                            "value": "8"
+                        }, {
+                            "value": "4"
+                        }]
+                    }, {
+                        "seriesname": "Waiting on supplier",
+                        "data": [{
+                            "value": "4"
+                        }, {
+                            "value": "6"
+                        }, {
+                            "value": "3"
+                        }, {
+                            "value": "7"
+                        }]
+                    }, {
+                        "seriesname": "Administratively completed",
+                        "data": [{
+                            "value": "2"
+                        }, {
+                            "value": "4"
+                        }, {
+                            "value": "7"
+                        }, {
+                            "value": "7"
+                        }]
+                    }, {
+                        "seriesname": "Rejected",
+                        "data": [{
+                            "value": "4"
+                        }, {
+                            "value": "6"
+                        }, {
+                            "value": "8"
+                        }, {
+                            "value": "4"
+                        }]
+                    }, {
+                        "seriesname": "Waiting on customer",
+                        "data": [{
+                            "value": "2"
+                        }, {
+                            "value": "8"
+                        }, {
+                            "value": "9"
+                        }, {
+                            "value": "3"
+                        }]
+                    }, {
+                        "seriesname": "Technically completed",
+                        "data": [{
+                            "value": "12"
+                        }, {
+                            "value": "5"
+                        }, {
+                            "value": "2"
+                        }, {
+                            "value": "4"
                         }]
                     }]
                 }
             }
             );
             chartObj.render();
+            var secondChartObj = new FusionCharts({
+                type: 'stackedcolumn2d',
+                renderAt: 'second-chart-container',
+                width: '680',
+                height: '390',
+                dataFormat: 'json',
+                dataSource: {
+                    "chart": {
+                        "caption": "Orders",
+                        "subCaption": "",
+                        "xAxisname": "No. of orders",
+                        "yAxisName": "Trade group",
+                        "showSum": "1",
+                        "numberPrefix": "",
+                        "theme": "fusion"
+                    },
+
+                    "categories": [{
+                        "category": [{
+                            "label": "Question"
+                        }, {
+                            "label": "Idea"
+                        }, {
+                            "label": "Plattform mailfunction"
+                        }, {
+                            "label": "Support request"
+                        }]
+                    }],
+
+                    "dataset": [{
+                        "seriesname": "Reported",
+                        "data": [{
+                            "value": "12"
+                        }, {
+                            "value": "4"
+                        }, {
+                            "value": "6"
+                        }, {
+                            "value": "6"
+                        }]
+                    }, {
+                        "seriesname": "Assigned",
+                        "data": [{
+                            "value": "8"
+                        }, {
+                            "value": "9"
+                        }, {
+                            "value": "12"
+                        }, {
+                            "value": "2"
+                        }]
+                    }]
+                }
+            }
+            );
+            secondChartObj.render();
+
         });
     </script>
 </head>
 
 <body>
     <div id="chart-container">FusionCharts XT will load here!</div>
+    <div id="second-chart-container">FusionCharts XT will load here!</div>
     <script src="../src/index.js"></script>
     <script>
         // Plaon fusion charts version 3.21.1
@@ -78,6 +323,7 @@
         $(document).ready(function () {
             console.log("ready!");
             fmpooljs(".fusioncharts-container").setStandardStatusColor();
+            fmpooljs(".second-chart-container").setStandardStatusColor();
         });
 
     </script>
