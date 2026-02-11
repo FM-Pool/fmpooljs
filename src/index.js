@@ -18,6 +18,11 @@
     const script = document.currentScript;
     const config = script?.dataset;
 
+    let colorPerStatus = [
+        { color: '#00ff00', status: ['Analyse issue']},
+        { color: '#0000ff', status: ['Assigned']},
+    ];
+
     // --- Internal state ---
     let loggingEnabled = false;
 
@@ -247,6 +252,32 @@
                 log("Prefill from store", key, value, $el);
                 $el.fillAutoCompleteTextField(value);
                 return $el;
+            }
+
+            $el.setStandardStatusColor = function() {
+                // todo for each
+                log("setStandardStatusColor", $el);
+                var chart = $el[0].FusionCharts;
+                var data = chart.getChartData('json')
+                log("data set", data);
+                //data.dataset[0].color = '#000000';
+                data.dataset.forEach(setColorPerDataset);
+                chart.setChartData(data, 'json');
+                
+            }
+
+            function setColorPerDataset(dateElement){
+                log("setColorPerDataset", dateElement, colorPerStatus);
+                for(var colorIdx = 0; colorIdx < colorPerStatus.length; colorIdx++){
+                    var colorPerStatusEntry = colorPerStatus[colorIdx];
+                    for(var statusIdx = 0; statusIdx < colorPerStatusEntry.status.length; statusIdx++) {
+                        let statusName = colorPerStatus[colorIdx].status[statusIdx];
+                        log("setColorPerDataset compare", statusName, dateElement.seriesname)
+                        if(statusName == dateElement.seriesname){
+                            dateElement.color = colorPerStatus[colorIdx].color;
+                        }
+                    }
+                }
             }
 
             return $el;

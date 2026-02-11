@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <title>My first chart using FusionCharts Suite XT</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/fusioncharts/3.21.0/fusioncharts.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <script type="text/javascript">
+        FusionCharts.ready(function () {
+            var chartObj = new FusionCharts({
+                type: 'stackedcolumn2d',
+                renderAt: 'chart-container',
+                width: '680',
+                height: '390',
+                dataFormat: 'json',
+                dataSource: {
+                    "chart": {
+                        "caption": "Revenue split by product category",
+                        "subCaption": "For current year",
+                        "xAxisname": "Quarter",
+                        "yAxisName": "Revenues (In USD)",
+                        "showSum": "1",
+                        "numberPrefix": "$",
+                        "theme": "fusion"
+                    },
+
+                    "categories": [{
+                        "category": [{
+                            "label": "Q1"
+                        }, {
+                            "label": "Q2"
+                        }, {
+                            "label": "Q3"
+                        }, {
+                            "label": "Q4"
+                        }]
+                    }],
+
+                    "dataset": [{
+                        "seriesname": "Analyse issue",
+                        "data": [{
+                            "value": "11000"
+                        }, {
+                            "value": "15000"
+                        }, {
+                            "value": "13500"
+                        }, {
+                            "value": "15000"
+                        }]
+                    }, {
+                        "seriesname": "Assigned",
+                        "data": [{
+                            "value": "11400"
+                        }, {
+                            "value": "14800"
+                        }, {
+                            "value": "8300"
+                        }, {
+                            "value": "11800"
+                        }]
+                    }]
+                }
+            }
+            );
+            chartObj.render();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="chart-container">FusionCharts XT will load here!</div>
+    <script src="../src/index.js"></script>
+    <script>
+        // Plaon fusion charts version 3.21.1
+        fmpooljs.enableLogging();
+        $(document).ready(function () {
+            console.log("ready!");
+            fmpooljs(".fusioncharts-container").setStandardStatusColor();
+        });
+
+    </script>
+</body>
+
+</html>
