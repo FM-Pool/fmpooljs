@@ -320,11 +320,8 @@
     <script>
         // Plaon fusion charts version 3.21.1
         fmpooljs.enableLogging();
-        $(document).ready(function () {
-            console.log("ready!");
-            fmpooljs(".fusioncharts-container").setStandardStatusColor();
-            fmpooljs(".second-chart-container").setStandardStatusColor();
-        });
+        fmpooljs.waitForElementToExist("#chart-container .fusioncharts-container", f => fmpooljs("#chart-container .fusioncharts-container").setStandardStatusColor());
+        fmpooljs.waitForElementToExist("#second-chart-container .fusioncharts-container", f => fmpooljs("#second-chart-container .fusioncharts-container").setStandardStatusColor());
 
     </script>
 </body>

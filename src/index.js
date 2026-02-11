@@ -386,6 +386,38 @@
             log("Logging disabled");
         };
 
+        /**
+         * @function disableLogging
+         * @access public
+         * @static
+         * @summary waits till the element exist (max waiting time 5000s).
+         * @param {*} selector select of element to appear
+         * @param {*} callback call back as a lambda function i.e.: f => myFunction()
+         */
+        fmpooljs.waitForElementToExist = function(selector, callback){
+            log("waitForElementToExist", selector, callback);
+            fmpooljs.waitForElementToExistWithCounter(selector, callback, 0);
+        }
+
+        fmpooljs.waitForElementToExistWithCounter = function(selector, callback, counter){
+            log("waitForElementToExistWithCounter", selector, callback, counter);
+            var fmElement = fmpooljs(selector);
+            log(fmElement, fmElement.length);
+            if(fmElement.length > 0) {
+                callback();
+            } else {
+                counter++;
+                if(counter > 10 ){
+                    return;
+                }
+                window.setTimeout(function () {
+                    fmpooljs.waitForElementToExistWithCounter(selector, callback, counter);
+                }, 500); 
+            }
+        }
+
+
+
         fmpooljs.version = version;
 
         return fmpooljs;
