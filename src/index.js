@@ -19,25 +19,25 @@
     const config = script?.dataset;
 
     let colorPerStatus = [
-        { color: '#750000', status: ['Rejected', 'Abgelehnt',  'Rifiutato']},
-        { color: '#FF8A8A', status: ['Reported', 'Gemeldet', 'Segnalato']},
-        { color: '#5C5CFF', status: ['Approved', 'Genehmigt', 'Approvato', 'Erledigt']},
-        { color: '#2E2EFF', status: ['Accepted', 'Akzeptiert',  'Accettato']},
-        { color: '#0000D1', status: ['Analyse issue', 'Analyse der Meldung',  'Analisi richista']},
-        { color: '#000075', status: ['In progress', 'Im Gange', 'In corso', 'In Bearbeitung', 'In lavorazione']},
-        { color: '#FFD700', status: ['In review ACC', 'Prüfung in ACC',  'Verifica in ACC']},
-        { color: '#D1B200', status: ['In review PROD', 'Prüfung in PROD',  'Verifica in PROD']},
-        { color: '#473D00', status: ['Migration to PROD', 'Migration nach PROD',  'Migrazione in PROD']},
-        { color: '#FFB8FF', status: ['Assigned', 'Beauftragt',  'Assegnato']},
-        { color: '#FF5CFF', status: ['Waiting on customer (Request)', 'Warten auf den Kunden (Meldung)', 'In attesa del cliente (Richiesta)']},
-        { color: '#FF00FF', status: ['Waiting on customer', 'Warten auf den Kunden',  'In attesa del cliente']},
-        { color: '#470047', status: ['Waiting on supplier', 'Warten auf den Lieferant',  'In attesa del fornitore']},
-        { color: '#470047', status: ['On hold', 'In der Warteschleife',  'In attesa']},
-        { color: '#2EFF2E', status: ['Temporary Fix', 'Provisorische Reparatur',  'Correzione temporanea']},
-        { color: '#00D100', status: ['Administratively completed', 'Administrativ abgeschlossen',  'Completato a livello amministrativo']},
-        { color: '#008000', status: ['Technically completed', 'Technisch abgeschlossen',  'Completato a livello tecnico']},
-        { color: '#004700', status: ['Completed', 'Abgeschlossen', 'Completato', 'Erledigt']},
-        { color: '#000000', status: ['Cancelled', 'Storniert', 'Zurückgenommen', 'Annullato']},
+        { color: '#750000', status: ['Rejected', 'Abgelehnt', 'Rifiutato'] },
+        { color: '#FF8A8A', status: ['Reported', 'Gemeldet', 'Segnalato'] },
+        { color: '#5C5CFF', status: ['Approved', 'Genehmigt', 'Approvato', 'Erledigt'] },
+        { color: '#2E2EFF', status: ['Accepted', 'Akzeptiert', 'Accettato'] },
+        { color: '#0000D1', status: ['Analyse issue', 'Analyse der Meldung', 'Analisi richista'] },
+        { color: '#000075', status: ['In progress', 'Im Gange', 'In corso', 'In Bearbeitung', 'In lavorazione'] },
+        { color: '#FFD700', status: ['In review ACC', 'Prüfung in ACC', 'Verifica in ACC'] },
+        { color: '#D1B200', status: ['In review PROD', 'Prüfung in PROD', 'Verifica in PROD'] },
+        { color: '#473D00', status: ['Migration to PROD', 'Migration nach PROD', 'Migrazione in PROD'] },
+        { color: '#FFB8FF', status: ['Assigned', 'Beauftragt', 'Assegnato'] },
+        { color: '#FF5CFF', status: ['Waiting on customer (Request)', 'Warten auf den Kunden (Meldung)', 'In attesa del cliente (Richiesta)'] },
+        { color: '#FF00FF', status: ['Waiting on customer', 'Warten auf den Kunden', 'In attesa del cliente'] },
+        { color: '#470047', status: ['Waiting on supplier', 'Warten auf den Lieferant', 'In attesa del fornitore'] },
+        { color: '#470047', status: ['On hold', 'In der Warteschleife', 'In attesa'] },
+        { color: '#2EFF2E', status: ['Temporary Fix', 'Provisorische Reparatur', 'Correzione temporanea'] },
+        { color: '#00D100', status: ['Administratively completed', 'Administrativ abgeschlossen', 'Completato a livello amministrativo'] },
+        { color: '#008000', status: ['Technically completed', 'Technisch abgeschlossen', 'Completato a livello tecnico'] },
+        { color: '#004700', status: ['Completed', 'Abgeschlossen', 'Completato', 'Erledigt'] },
+        { color: '#000000', status: ['Cancelled', 'Storniert', 'Zurückgenommen', 'Annullato'] },
     ];
 
     // --- Internal state ---
@@ -174,7 +174,7 @@
                 return $el;
             };
 
-            
+
             /**
              * @function readonlyOnSessionCondition
              * @access public
@@ -217,7 +217,7 @@
              */
             $el.saveFieldValueToStore = function (key) {
                 let val = $el.find("input").val();
-                if(val === undefined) {
+                if (val === undefined) {
                     val = $el.find(".pss_field_value").text().trim();
                 }
                 log("Save field value to store:", key, val);
@@ -231,9 +231,9 @@
              * @summary gets the value of the input within the selector.
              * @returns value of the input field
              */
-            $el.getFieldValue = function(){
+            $el.getFieldValue = function () {
                 let val = $el.find("input").val();
-                if(val === undefined) {
+                if (val === undefined) {
                     val = $el.find(".pss_field_value").text().trim();
                 }
                 return val;
@@ -277,27 +277,27 @@
              * @summary set colors for datasets according to color definition
              * @returns fmpooljs object
              */
-            $el.setStandardStatusColor = function() {
+            $el.setStandardStatusColor = function () {
                 log("setStandardStatusColor", $el);
-                for(var eleIdx = 0; eleIdx < $el.length; eleIdx++){
+                for (var eleIdx = 0; eleIdx < $el.length; eleIdx++) {
                     var element = $el[eleIdx];
-                    if(element.hasOwnProperty('FusionCharts')){
+                    if (element.hasOwnProperty('FusionCharts')) {
                         var chart = element.FusionCharts;
                         var data = chart.getChartData('json');
                         data.dataset.forEach(setColorPerDataset);
                         log("set colors", chart, data);
                         chart.setChartData(data, 'json');
                     }
-                }   
-                return $el;         
+                }
+                return $el;
             }
 
-            function setColorPerDataset(dateElement){
-                for(var colorIdx = 0; colorIdx < colorPerStatus.length; colorIdx++){
+            function setColorPerDataset(dateElement) {
+                for (var colorIdx = 0; colorIdx < colorPerStatus.length; colorIdx++) {
                     var colorPerStatusEntry = colorPerStatus[colorIdx];
-                    for(var statusIdx = 0; statusIdx < colorPerStatusEntry.status.length; statusIdx++) {
+                    for (var statusIdx = 0; statusIdx < colorPerStatusEntry.status.length; statusIdx++) {
                         let statusName = colorPerStatus[colorIdx].status[statusIdx];
-                        if(statusName == dateElement.seriesname){
+                        if (statusName == dateElement.seriesname) {
                             dateElement.color = colorPerStatus[colorIdx].color;
                         }
                     }
@@ -394,25 +394,25 @@
          * @param {*} selector select of element to appear
          * @param {*} callback call back as a lambda function i.e.: f => myFunction()
          */
-        fmpooljs.waitForElementToExist = function(selector, callback){
+        fmpooljs.waitForElementToExist = function (selector, callback) {
             log("waitForElementToExist", selector, callback);
             fmpooljs.waitForElementToExistWithCounter(selector, callback, 0);
         }
 
-        fmpooljs.waitForElementToExistWithCounter = function(selector, callback, counter){
+        fmpooljs.waitForElementToExistWithCounter = function (selector, callback, counter) {
             log("waitForElementToExistWithCounter", selector, callback, counter);
             var fmElement = fmpooljs(selector);
             log(fmElement, fmElement.length);
-            if(fmElement.length > 0) {
+            if (fmElement.length > 0) {
                 callback();
             } else {
                 counter++;
-                if(counter > 10 ){
+                if (counter > 10) {
                     return;
                 }
                 window.setTimeout(function () {
                     fmpooljs.waitForElementToExistWithCounter(selector, callback, counter);
-                }, 500); 
+                }, 500);
             }
         }
 
