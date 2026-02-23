@@ -152,7 +152,7 @@
                 return $el;
             };
 
-            
+
             /**
              * @function readonlyOnSessionCondition
              * @access public
@@ -195,7 +195,7 @@
              */
             $el.saveFieldValueToStore = function (key) {
                 let val = $el.find("input").val();
-                if(val === undefined) {
+                if (val === undefined) {
                     val = $el.find(".pss_field_value").text().trim();
                 }
                 log("Save field value to store:", key, val);
@@ -209,9 +209,9 @@
              * @summary gets the value of the input within the selector.
              * @returns value of the input field
              */
-            $el.getFieldValue = function(){
+            $el.getFieldValue = function () {
                 let val = $el.find("input").val();
-                if(val === undefined) {
+                if (val === undefined) {
                     val = $el.find(".pss_field_value").text().trim();
                 }
                 return val;
@@ -247,6 +247,25 @@
                 log("Prefill from store", key, value, $el);
                 $el.fillAutoCompleteTextField(value);
                 return $el;
+            }
+
+            $el.addFastPaggingButtonToTable = function () {
+                var navwrapper = $el.find('.pss_navigation');
+                log("addFastPaggingButtonToTable", navwrapper, $el);
+                navwrapper.before('<button class="fmpooljs_minus_ten pss_action" type="button" role="button"><<<span class="pss_action_label"></span></button>');
+                navwrapper.append('<button class="fmpooljs_plus_ten pss_action" type="button" role="button">>><span class="pss_action_label"></span></button>');
+                $('.fmpooljs_plus_ten').on("click", function () {
+                    for (var i = 0; i < 10; i++) {
+                        $('.pss_nav_next').click();
+                    }
+
+                });
+                $('.fmpooljs_minus_ten').on("click", function () {
+                    for (var i = 0; i < 10; i++) {
+                        $('.pss_nav_prev').click();
+                    }
+
+                });
             }
 
             return $el;
