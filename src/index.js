@@ -207,6 +207,9 @@
              * @function getFieldValue
              * @access public
              * @summary gets the value of the input within the selector.
+             * @example 
+             * // add in JS tab of List block
+             * fmpooljs(this).addFastPaggingButtonToTable();
              * @returns value of the input field
              */
             $el.getFieldValue = function () {
