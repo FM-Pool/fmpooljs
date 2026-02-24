@@ -207,9 +207,6 @@
              * @function getFieldValue
              * @access public
              * @summary gets the value of the input within the selector.
-             * @example 
-             * // add in JS tab of List block
-             * fmpooljs(this).addFastPaggingButtonToTable();
              * @returns value of the input field
              */
             $el.getFieldValue = function () {
@@ -256,6 +253,9 @@
              * @function addFastPaggingButtonToTable
              * @access public
              * @summary adds a pagging button to a table which goes 10 pages further or back.
+             * @example 
+             * // add in JS tab of List block
+             * fmpooljs(this).addFastPaggingButtonToTable();
              * @returns fmpooljs object
              */
             $el.addFastPaggingButtonToTable = function () {

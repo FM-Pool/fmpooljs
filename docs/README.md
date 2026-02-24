@@ -195,10 +195,6 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 **Summary**: gets the value of the input within the selector.  
 **Returns**: value of the input field  
 **Access**: public  
-**Example**  
-```js
-// add in JS tab of List blockfmpooljs(this).addFastPaggingButtonToTable();
-```
 <a name="module_fmpooljs..clearOnSessionValueCondition"></a>
 
 ### fmpooljs~clearOnSessionValueCondition(key, predict) ⇒
@@ -231,3 +227,7 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 **Summary**: adds a pagging button to a table which goes 10 pages further or back.  
 **Returns**: fmpooljs object  
 **Access**: public  
+**Example**  
+```js
+// add in JS tab of List blockfmpooljs(this).addFastPaggingButtonToTable();
+```
