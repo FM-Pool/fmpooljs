@@ -54,6 +54,7 @@ fmpooljs uses jquery to select elements from the DOM.
         * [~getFieldValue()](#module_fmpooljs..getFieldValue) ⇒
         * [~clearOnSessionValueCondition(key, predict)](#module_fmpooljs..clearOnSessionValueCondition) ⇒
         * [~prefillFromStore(key)](#module_fmpooljs..prefillFromStore) ⇒
+        * [~addFastPaggingButtonToTable()](#module_fmpooljs..addFastPaggingButtonToTable) ⇒
 
 <a name="module_fmpooljs.setSessionItem"></a>
 
@@ -219,3 +220,10 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 | --- | --- | --- |
 | key | <code>String</code> | key of session storage |
 
+<a name="module_fmpooljs..addFastPaggingButtonToTable"></a>
+
+### fmpooljs~addFastPaggingButtonToTable() ⇒
+**Kind**: inner method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: adds a pagging button to a table which goes 10 pages further or back.  
+**Returns**: fmpooljs object  
+**Access**: public  

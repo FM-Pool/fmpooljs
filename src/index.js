@@ -249,23 +249,44 @@
                 return $el;
             }
 
+            /**
+             * @function addFastPaggingButtonToTable
+             * @access public
+             * @summary adds a pagging button to a table which goes 10 pages further or back.
+             * @returns fmpooljs object
+             */
             $el.addFastPaggingButtonToTable = function () {
                 var navwrapper = $el.find('.pss_navigation');
                 log("addFastPaggingButtonToTable", navwrapper, $el);
-                navwrapper.before('<button class="fmpooljs_minus_ten pss_action" type="button" role="button"><<<span class="pss_action_label"></span></button>');
-                navwrapper.append('<button class="fmpooljs_plus_ten pss_action" type="button" role="button">>><span class="pss_action_label"></span></button>');
-                $('.fmpooljs_plus_ten').on("click", function () {
-                    for (var i = 0; i < 10; i++) {
-                        $('.pss_nav_next').click();
-                    }
+                $el.prepend('<style>.fmpooljs_minus_ten::before { content: "\\f01f9" !important; font-family: "Planon-icons"; }</style>');
+                $el.prepend('<style>.fmpooljs_plus_ten::before { content: "\\f01fc" !important; font-family: "Planon-icons"; }</style>');
+                navwrapper.prepend('<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
+                navwrapper.append('<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
 
-                });
-                $('.fmpooljs_minus_ten').on("click", function () {
-                    for (var i = 0; i < 10; i++) {
-                        $('.pss_nav_prev').click();
-                    }
+                // set the correct disable status
+                if ($el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
+                    $el.find('.fmpooljs_minus_ten').addClass('pss_disabled');
+                } else {
+                    $el.find('.fmpooljs_minus_ten').removeClass('pss_disabled');
+                }
 
+                if ($el.find('.pss_actionname_nextpage').hasClass('pss_disabled')) {
+                    $el.find('.fmpooljs_plus_ten').addClass('pss_disabled');
+                } else {
+                    $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
+                }
+
+                $el.find('.fmpooljs_plus_ten').on("click", function () {
+                    for (var i = 0; i < 10; i++) {
+                        $el.find('.pss_actionname_nextpage').click();
+                    }
                 });
+                $el.find('.fmpooljs_minus_ten').on("click", function () {
+                    for (var i = 0; i < 10; i++) {
+                        $el.find('.pss_actiontype_prevpage').click();
+                    }
+                });
+                return $el;
             }
 
             return $el;
