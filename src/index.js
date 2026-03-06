@@ -249,6 +249,26 @@
                 return $el;
             }
 
+            /**
+             * @function extractOrderNumberFromText
+             * @access public
+             * @summary extracst the first occurrence of a order number from the text within the element.
+             * @returns orderNumber
+             */
+            $el.extractOrderNumberFromText = function() {
+                log("Extrac order number from text", $el);
+                if($el) {
+                    var elementText = $el.text();
+                    const regEx = /\d+(\.)\d+/g;
+                    var res = regEx.exec(elementText);
+                    log("Regex operation", elementText, res);
+                    if(res != null){ 
+                        return res[0];
+                    }
+                }
+                return null;
+            }
+
             return $el;
         }
 
