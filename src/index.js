@@ -358,6 +358,11 @@
          * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesbusinessrules/sabesbusinessrules/cadviewer/
          */
         fmpooljs.updateCadViewer = function(orderNumber) {
+            log("updateCadViewer", orderNumber);
+            if(orderNumber == null) {
+                log("order number is null. request aborted");
+                return;
+            }
             $.ajax({
                 url: '/services/sdk/platform/jaxrs/fmpool/partner/sabesbusinessrules/sabesbusinessrules/cadviewer/' + orderNumber,
                 type: 'PUT',
