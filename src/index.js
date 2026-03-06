@@ -256,7 +256,7 @@
              * @returns orderNumber
              */
             $el.extractOrderNumberFromText = function() {
-                log("Extrac order number from text", $el);
+                log("Extract order number from text", $el);
                 if($el) {
                     var elementText = $el.text();
                     const regEx = /\d+(\.)\d+/g;
