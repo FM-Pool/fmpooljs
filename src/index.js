@@ -344,12 +344,31 @@
          * @function disableLogging
          * @access public
          * @static
-         * @summary deactivats logging
+         * @summary deactivate logging
          */
         fmpooljs.disableLogging = function () {
             loggingEnabled = false;
             log("Logging disabled");
         };
+
+        /**
+         * @function updateCadViewer
+         * @access public
+         * @static
+         * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesbusinessrules/sabesbusinessrules/cadviewer/
+         */
+        fmpooljs.updateCadViewer = function(orderNumber) {
+            $.ajax({
+                url: '/services/sdk/platform/jaxrs/fmpool/partner/sabesbusinessrules/sabesbusinessrules/cadviewer/' + orderNumber,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: '{}',
+                success: function (data) {
+                    log('Updated CAD data.', data);
+                }
+            });
+
+        }
 
         fmpooljs.version = version;
 
