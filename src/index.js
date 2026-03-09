@@ -292,6 +292,7 @@
                 return $el;
             }
 
+            // internal funtion
             function setColorPerDataset(dateElement) {
                 for (var colorIdx = 0; colorIdx < colorPerStatus.length; colorIdx++) {
                     var colorPerStatusEntry = colorPerStatus[colorIdx];
@@ -387,18 +388,26 @@
         };
 
         /**
-         * @function disableLogging
+         * @function waitForElementToExist
          * @access public
          * @static
          * @summary waits till the element exist (max waiting time 5000s).
          * @param {*} selector select of element to appear
-         * @param {*} callback call back as a lambda function i.e.: f => myFunction()
+         * @param {*} callback callback as a lambda function i.e.: f => myFunction()
          */
         fmpooljs.waitForElementToExist = function (selector, callback) {
             log("waitForElementToExist", selector, callback);
             fmpooljs.waitForElementToExistWithCounter(selector, callback, 0);
         }
 
+        /**
+         * @function waitForElementToExistWithCounter
+         * @access public
+         * @static
+         * @summary waits until the element exist or the counter is reached. Counter is a number under 9. Everytime the element is not found the counter is increased and waits for 500ms. When the counter reaches 10, the waiting is aborted.
+         * @param {*} selector select of element to appear
+         * @param {*} callback callback as a lambda function i.e.: f => myFunction()
+         */
         fmpooljs.waitForElementToExistWithCounter = function (selector, callback, counter) {
             log("waitForElementToExistWithCounter", selector, callback, counter);
             var fmElement = fmpooljs(selector);

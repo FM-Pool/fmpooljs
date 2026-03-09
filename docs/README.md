@@ -43,6 +43,8 @@ fmpooljs uses jquery to select elements from the DOM.
         * [.evenCompare(value)](#module_fmpooljs.evenCompare) ⇒
         * [.enableLogging()](#module_fmpooljs.enableLogging)
         * [.disableLogging()](#module_fmpooljs.disableLogging)
+        * [.waitForElementToExist(selector, callback)](#module_fmpooljs.waitForElementToExist)
+        * [.waitForElementToExistWithCounter(selector, callback)](#module_fmpooljs.waitForElementToExistWithCounter)
     * _inner_
         * [~readonly()](#module_fmpooljs..readonly) ⇒
         * [~clear()](#module_fmpooljs..clear) ⇒
@@ -54,6 +56,7 @@ fmpooljs uses jquery to select elements from the DOM.
         * [~getFieldValue()](#module_fmpooljs..getFieldValue) ⇒
         * [~clearOnSessionValueCondition(key, predict)](#module_fmpooljs..clearOnSessionValueCondition) ⇒
         * [~prefillFromStore(key)](#module_fmpooljs..prefillFromStore) ⇒
+        * [~setStandardStatusColor()](#module_fmpooljs..setStandardStatusColor) ⇒
 
 <a name="module_fmpooljs.setSessionItem"></a>
 
@@ -115,6 +118,30 @@ fmpooljs uses jquery to select elements from the DOM.
 **Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
 **Summary**: deactivats logging  
 **Access**: public  
+<a name="module_fmpooljs.waitForElementToExist"></a>
+
+### fmpooljs.waitForElementToExist(selector, callback)
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: waits till the element exist (max waiting time 5000s).  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | <code>\*</code> | select of element to appear |
+| callback | <code>\*</code> | callback as a lambda function i.e.: f => myFunction() |
+
+<a name="module_fmpooljs.waitForElementToExistWithCounter"></a>
+
+### fmpooljs.waitForElementToExistWithCounter(selector, callback)
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: waits until the element exist or the counter is reached. Counter is a number under 9. Everytime the element is not found the counter is increased and waits for 500ms. When the counter reaches 10, the waiting is aborted.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | <code>\*</code> | select of element to appear |
+| callback | <code>\*</code> | callback as a lambda function i.e.: f => myFunction() |
+
 <a name="module_fmpooljs..readonly"></a>
 
 ### fmpooljs~readonly() ⇒
@@ -219,3 +246,10 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 | --- | --- | --- |
 | key | <code>String</code> | key of session storage |
 
+<a name="module_fmpooljs..setStandardStatusColor"></a>
+
+### fmpooljs~setStandardStatusColor() ⇒
+**Kind**: inner method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: set colors for datasets according to color definition  
+**Returns**: fmpooljs object  
+**Access**: public  
