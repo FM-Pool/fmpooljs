@@ -277,7 +277,7 @@
              * @summary set colors for datasets according to color definition
              * @see waitForElementToExist
              * @example 
-             * // it might be needed to wait for the fusion chart container to exist (see waitForElementToExist)
+             * // it might be needed to wait for the fusion chart container to exist (see waitForElementToExist). Should be used in the JavaScript tab of the chart.
              * fmpooljs(".fusioncharts-container").setStandardStatusColor();
              * @returns fmpooljs object
              */
@@ -319,7 +319,7 @@
          * @static
          * @summary set value into session storage
          * @param {String} key key of session storage
-         * @param {String} val value of session storage
+         * @param {*} val value of session storage
          */
         fmpooljs.setSessionItem = function (key, val) {
             session.setItem(key, val);
@@ -331,7 +331,7 @@
          * @access public
          * @static
          * @summary save value to session storage
-         * @param {*} key key of session storage
+         * @param {String} key key of session storage
          * @returns value of session storage
          */
         fmpooljs.getSessionItem = function (key) {
@@ -401,8 +401,8 @@
          * fmpooljs.waitForElementToExist(".fusioncharts-container", 
          *  f => fmpooljs(".fusioncharts-container").setStandardStatusColor()
          * );
-         * @param {*} selector select of element to appear
-         * @param {*} callback callback as a lambda function i.e.: f => myFunction()
+         * @param {String} selector select of element to appear
+         * @param {Function} callback callback as a lambda function i.e.: f => myFunction()
          */
         fmpooljs.waitForElementToExist = function (selector, callback) {
             log("waitForElementToExist", selector, callback);
@@ -420,8 +420,8 @@
          *  f => fmpooljs(".fusioncharts-container").setStandardStatusColor(), 
          *  5
          * );
-         * @param {*} selector select of element to appear
-         * @param {*} callback callback as a lambda function i.e.: f => myFunction()
+         * @param {String} selector select of element to appear
+         * @param {Function} callback callback as a lambda function i.e.: f => myFunction()
          */
         fmpooljs.waitForElementToExistWithCounter = function (selector, callback, counter) {
             log("waitForElementToExistWithCounter", selector, callback, counter);

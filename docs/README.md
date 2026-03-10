@@ -68,7 +68,7 @@ fmpooljs uses jquery to select elements from the DOM.
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>String</code> | key of session storage |
-| val | <code>String</code> | value of session storage |
+| val | <code>\*</code> | value of session storage |
 
 <a name="module_fmpooljs.getSessionItem"></a>
 
@@ -80,7 +80,7 @@ fmpooljs uses jquery to select elements from the DOM.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>\*</code> | key of session storage |
+| key | <code>String</code> | key of session storage |
 
 <a name="module_fmpooljs.unevenCompare"></a>
 
@@ -127,8 +127,8 @@ fmpooljs uses jquery to select elements from the DOM.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| selector | <code>\*</code> | select of element to appear |
-| callback | <code>\*</code> | callback as a lambda function i.e.: f => myFunction() |
+| selector | <code>String</code> | select of element to appear |
+| callback | <code>function</code> | callback as a lambda function i.e.: f => myFunction() |
 
 **Example**  
 ```js
@@ -143,8 +143,8 @@ fmpooljs uses jquery to select elements from the DOM.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| selector | <code>\*</code> | select of element to appear |
-| callback | <code>\*</code> | callback as a lambda function i.e.: f => myFunction() |
+| selector | <code>String</code> | select of element to appear |
+| callback | <code>function</code> | callback as a lambda function i.e.: f => myFunction() |
 
 **Example**  
 ```js
@@ -264,5 +264,5 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 **See**: waitForElementToExist  
 **Example**  
 ```js
-// it might be needed to wait for the fusion chart container to exist (see waitForElementToExist)fmpooljs(".fusioncharts-container").setStandardStatusColor();
+// it might be needed to wait for the fusion chart container to exist (see waitForElementToExist). Should be used in the JavaScript tab of the chart.fmpooljs(".fusioncharts-container").setStandardStatusColor();
 ```
