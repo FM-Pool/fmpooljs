@@ -275,6 +275,10 @@
              * @function setStandardStatusColor
              * @access public
              * @summary set colors for datasets according to color definition
+             * @see waitForElementToExist
+             * @example 
+             * // it might be needed to wait for the fusion chart container to exist (see waitForElementToExist)
+             * fmpooljs(".fusioncharts-container").setStandardStatusColor();
              * @returns fmpooljs object
              */
             $el.setStandardStatusColor = function () {
@@ -391,7 +395,12 @@
          * @function waitForElementToExist
          * @access public
          * @static
-         * @summary waits till the element exist (max waiting time 5000s).
+         * @summary waits till the element exist (max waiting time 5000 ms).
+         * @example
+         * // waits till a element with class fusioncharts-container exists
+         * fmpooljs.waitForElementToExist(".fusioncharts-container", 
+         *  f => fmpooljs(".fusioncharts-container").setStandardStatusColor()
+         * );
          * @param {*} selector select of element to appear
          * @param {*} callback callback as a lambda function i.e.: f => myFunction()
          */
@@ -405,6 +414,12 @@
          * @access public
          * @static
          * @summary waits until the element exist or the counter is reached. Counter is a number under 9. Everytime the element is not found the counter is increased and waits for 500ms. When the counter reaches 10, the waiting is aborted.
+         * @example
+         * // waits max 2500 ms for a element with class fusioncharts-container to exist
+         * fmpooljs.waitForElementToExistWithCounter(".fusioncharts-container", 
+         *  f => fmpooljs(".fusioncharts-container").setStandardStatusColor(), 
+         *  5
+         * );
          * @param {*} selector select of element to appear
          * @param {*} callback callback as a lambda function i.e.: f => myFunction()
          */

@@ -122,7 +122,7 @@ fmpooljs uses jquery to select elements from the DOM.
 
 ### fmpooljs.waitForElementToExist(selector, callback)
 **Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
-**Summary**: waits till the element exist (max waiting time 5000s).  
+**Summary**: waits till the element exist (max waiting time 5000 ms).  
 **Access**: public  
 
 | Param | Type | Description |
@@ -130,6 +130,10 @@ fmpooljs uses jquery to select elements from the DOM.
 | selector | <code>\*</code> | select of element to appear |
 | callback | <code>\*</code> | callback as a lambda function i.e.: f => myFunction() |
 
+**Example**  
+```js
+// waits till a element with class fusioncharts-container existsfmpooljs.waitForElementToExist(".fusioncharts-container",  f => fmpooljs(".fusioncharts-container").setStandardStatusColor());
+```
 <a name="module_fmpooljs.waitForElementToExistWithCounter"></a>
 
 ### fmpooljs.waitForElementToExistWithCounter(selector, callback)
@@ -142,6 +146,10 @@ fmpooljs uses jquery to select elements from the DOM.
 | selector | <code>\*</code> | select of element to appear |
 | callback | <code>\*</code> | callback as a lambda function i.e.: f => myFunction() |
 
+**Example**  
+```js
+// waits max 2500 ms for a element with class fusioncharts-container to existfmpooljs.waitForElementToExistWithCounter(".fusioncharts-container",  f => fmpooljs(".fusioncharts-container").setStandardStatusColor(),  5);
+```
 <a name="module_fmpooljs..readonly"></a>
 
 ### fmpooljs~readonly() ⇒
@@ -253,3 +261,8 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 **Summary**: set colors for datasets according to color definition  
 **Returns**: fmpooljs object  
 **Access**: public  
+**See**: waitForElementToExist  
+**Example**  
+```js
+// it might be needed to wait for the fusion chart container to exist (see waitForElementToExist)fmpooljs(".fusioncharts-container").setStandardStatusColor();
+```
