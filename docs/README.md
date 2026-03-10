@@ -43,6 +43,8 @@ fmpooljs uses jquery to select elements from the DOM.
         * [.evenCompare(value)](#module_fmpooljs.evenCompare) ⇒
         * [.enableLogging()](#module_fmpooljs.enableLogging)
         * [.disableLogging()](#module_fmpooljs.disableLogging)
+        * [.waitForElementToExist(selector, callback)](#module_fmpooljs.waitForElementToExist)
+        * [.waitForElementToExistWithCounter(selector, callback)](#module_fmpooljs.waitForElementToExistWithCounter)
     * _inner_
         * [~readonly()](#module_fmpooljs..readonly) ⇒
         * [~clear()](#module_fmpooljs..clear) ⇒
@@ -54,6 +56,7 @@ fmpooljs uses jquery to select elements from the DOM.
         * [~getFieldValue()](#module_fmpooljs..getFieldValue) ⇒
         * [~clearOnSessionValueCondition(key, predict)](#module_fmpooljs..clearOnSessionValueCondition) ⇒
         * [~prefillFromStore(key)](#module_fmpooljs..prefillFromStore) ⇒
+        * [~setStandardStatusColor()](#module_fmpooljs..setStandardStatusColor) ⇒
 
 <a name="module_fmpooljs.setSessionItem"></a>
 
@@ -65,7 +68,7 @@ fmpooljs uses jquery to select elements from the DOM.
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>String</code> | key of session storage |
-| val | <code>String</code> | value of session storage |
+| val | <code>\*</code> | value of session storage |
 
 <a name="module_fmpooljs.getSessionItem"></a>
 
@@ -77,7 +80,7 @@ fmpooljs uses jquery to select elements from the DOM.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>\*</code> | key of session storage |
+| key | <code>String</code> | key of session storage |
 
 <a name="module_fmpooljs.unevenCompare"></a>
 
@@ -115,6 +118,38 @@ fmpooljs uses jquery to select elements from the DOM.
 **Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
 **Summary**: deactivats logging  
 **Access**: public  
+<a name="module_fmpooljs.waitForElementToExist"></a>
+
+### fmpooljs.waitForElementToExist(selector, callback)
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: waits till the element exist (max waiting time 5000 ms).  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | <code>String</code> | select of element to appear |
+| callback | <code>function</code> | callback as a lambda function i.e.: f => myFunction() |
+
+**Example**  
+```js
+// waits till a element with class fusioncharts-container existsfmpooljs.waitForElementToExist(".fusioncharts-container",  f => fmpooljs(".fusioncharts-container").setStandardStatusColor());
+```
+<a name="module_fmpooljs.waitForElementToExistWithCounter"></a>
+
+### fmpooljs.waitForElementToExistWithCounter(selector, callback)
+**Kind**: static method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: waits until the element exist or the counter is reached. Counter is a number under 9. Everytime the element is not found the counter is increased and waits for 500ms. When the counter reaches 10, the waiting is aborted.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| selector | <code>String</code> | select of element to appear |
+| callback | <code>function</code> | callback as a lambda function i.e.: f => myFunction() |
+
+**Example**  
+```js
+// waits max 2500 ms for a element with class fusioncharts-container to existfmpooljs.waitForElementToExistWithCounter(".fusioncharts-container",  f => fmpooljs(".fusioncharts-container").setStandardStatusColor(),  5);
+```
 <a name="module_fmpooljs..readonly"></a>
 
 ### fmpooljs~readonly() ⇒
@@ -219,3 +254,15 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 | --- | --- | --- |
 | key | <code>String</code> | key of session storage |
 
+<a name="module_fmpooljs..setStandardStatusColor"></a>
+
+### fmpooljs~setStandardStatusColor() ⇒
+**Kind**: inner method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: set colors for datasets according to color definition  
+**Returns**: fmpooljs object  
+**Access**: public  
+**See**: waitForElementToExist  
+**Example**  
+```js
+// it might be needed to wait for the fusion chart container to exist (see waitForElementToExist). Should be used in the JavaScript tab of the chart.fmpooljs(".fusioncharts-container").setStandardStatusColor();
+```
