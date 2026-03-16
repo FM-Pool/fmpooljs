@@ -272,6 +272,26 @@
             }
 
             /**
+             * @function extractOrderNumberFromText
+             * @access public
+             * @summary extracst the first occurrence of a order number from the text within the element.
+             * @returns orderNumber
+             */
+            $el.extractOrderNumberFromText = function() {
+                log("Extract order number from text", $el);
+                if($el) {
+                    var elementText = $el.text();
+                    const regEx = /\d+(\.)\d+/g;
+                    var res = regEx.exec(elementText);
+                    log("Regex operation", elementText, res);
+                    if(res != null){ 
+                        return res[0];
+                    }
+                }
+                return null;
+            }
+
+            /**
              * @function setStandardStatusColor
              * @access public
              * @summary set colors for datasets according to color definition
@@ -384,12 +404,36 @@
          * @function disableLogging
          * @access public
          * @static
-         * @summary deactivats logging
+         * @summary deactivate logging
          */
         fmpooljs.disableLogging = function () {
             loggingEnabled = false;
             log("Logging disabled");
         };
+
+        /**
+         * @function updateCadViewer
+         * @access public
+         * @static
+         * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/
+         */
+        fmpooljs.updateCadViewer = function(orderNumber) {
+            log("updateCadViewer", orderNumber);
+            if(orderNumber == null) {
+                log("order number is null. request aborted");
+                return;
+            }
+            $.ajax({
+                url: '/services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/' + orderNumber,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: '{}',
+                success: function (data) {
+                    log('Updated CAD data.', data);
+                }
+            });
+
+        }
 
         /**
          * @function waitForElementToExist
