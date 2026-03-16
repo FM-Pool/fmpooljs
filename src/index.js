@@ -355,7 +355,7 @@
          * @function updateCadViewer
          * @access public
          * @static
-         * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesbusinessrules/sabesbusinessrules/cadviewer/
+         * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/
          */
         fmpooljs.updateCadViewer = function(orderNumber) {
             log("updateCadViewer", orderNumber);
@@ -364,7 +364,7 @@
                 return;
             }
             $.ajax({
-                url: '/services/sdk/platform/jaxrs/fmpool/partner/sabesbusinessrules/sabesbusinessrules/cadviewer/' + orderNumber,
+                url: '/services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/' + orderNumber,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: '{}',
