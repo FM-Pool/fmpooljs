@@ -18,6 +18,28 @@
     const script = document.currentScript;
     const config = script?.dataset;
 
+    let colorPerStatus = [
+        { color: '#746D75', status: ['Rejected', 'Abgelehnt', 'Rifiutato'] },
+        { color: '#DA4949', status: ['Reported', 'Gemeldet', 'Segnalato'] },
+        { color: '#9E643C', status: ['Approved', 'Genehmigt', 'Approvato', 'Erledigt'] },
+        { color: '#593837', status: ['Accepted', 'Akzeptiert', 'Accettato'] },
+        { color: '#B4E1FF', status: ['Analyse issue', 'Analyse der Meldung', 'Analisi richista'] },
+        { color: '#000075', status: ['In progress', 'Im Gange', 'In corso', 'In Bearbeitung', 'In lavorazione'] },
+        { color: '#F0E247', status: ['In review ACC', 'Prüfung in ACC', 'Verifica in ACC'] },
+        { color: '#F7A82A', status: ['In review PROD', 'Prüfung in PROD', 'Verifica in PROD'] },
+        { color: '#F7672A', status: ['Migration to PROD', 'Migration nach PROD', 'Migrazione in PROD'] },
+        { color: '#FFACE4', status: ['Assigned', 'Beauftragt', 'Assegnato'] },
+        { color: '#A167A5', status: ['Waiting on customer (Request)', 'Warten auf den Kunden (Meldung)', 'In attesa del cliente (Richiesta)'] },
+        { color: '#A167A5', status: ['Waiting on customer', 'Warten auf den Kunden', 'In attesa del cliente'] },
+        { color: '#CC207C', status: ['Waiting on supplier', 'Warten auf den Lieferant', 'In attesa del fornitore'] },
+        { color: '#3345BD', status: ['On hold', 'In der Warteschleife', 'In attesa'] },
+        { color: '#7CFEF0', status: ['Temporary Fix', 'Provisorische Reparatur', 'Correzione temporanea'] },
+        { color: '#00B04F', status: ['Administratively completed', 'Administrativ abgeschlossen', 'Completato a livello amministrativo'] },
+        { color: '#6BFFB8', status: ['Technically completed', 'Technisch abgeschlossen', 'Completato a livello tecnico'] },
+        { color: '#0d4726', status: ['Completed', 'Abgeschlossen', 'Completato', 'Erledigt'] },
+        { color: '#000000', status: ['Cancelled', 'Storniert', 'Zurückgenommen', 'Annullato'] },
+    ];
+
     // --- Internal state ---
     let loggingEnabled = false;
 
@@ -152,7 +174,7 @@
                 return $el;
             };
 
-            
+
             /**
              * @function readonlyOnSessionCondition
              * @access public
@@ -195,7 +217,7 @@
              */
             $el.saveFieldValueToStore = function (key) {
                 let val = $el.find("input").val();
-                if(val === undefined) {
+                if (val === undefined) {
                     val = $el.find(".pss_field_value").text().trim();
                 }
                 log("Save field value to store:", key, val);
@@ -209,9 +231,9 @@
              * @summary gets the value of the input within the selector.
              * @returns value of the input field
              */
-            $el.getFieldValue = function(){
+            $el.getFieldValue = function () {
                 let val = $el.find("input").val();
-                if(val === undefined) {
+                if (val === undefined) {
                     val = $el.find(".pss_field_value").text().trim();
                 }
                 return val;
@@ -269,6 +291,44 @@
                 return null;
             }
 
+            /**
+             * @function setStandardStatusColor
+             * @access public
+             * @summary set colors for datasets according to color definition
+             * @see waitForElementToExist
+             * @example 
+             * // it might be needed to wait for the fusion chart container to exist (see waitForElementToExist). Should be used in the JavaScript tab of the chart.
+             * fmpooljs(".fusioncharts-container").setStandardStatusColor();
+             * @returns fmpooljs object
+             */
+            $el.setStandardStatusColor = function () {
+                log("setStandardStatusColor", $el);
+                for (var eleIdx = 0; eleIdx < $el.length; eleIdx++) {
+                    var element = $el[eleIdx];
+                    if (element.hasOwnProperty('FusionCharts')) {
+                        var chart = element.FusionCharts;
+                        var data = chart.getChartData('json');
+                        data.dataset.forEach(setColorPerDataset);
+                        log("set colors", chart, data);
+                        chart.setChartData(data, 'json');
+                    }
+                }
+                return $el;
+            }
+
+            // internal funtion
+            function setColorPerDataset(dateElement) {
+                for (var colorIdx = 0; colorIdx < colorPerStatus.length; colorIdx++) {
+                    var colorPerStatusEntry = colorPerStatus[colorIdx];
+                    for (var statusIdx = 0; statusIdx < colorPerStatusEntry.status.length; statusIdx++) {
+                        let statusName = colorPerStatus[colorIdx].status[statusIdx];
+                        if (statusName == dateElement.seriesname) {
+                            dateElement.color = colorPerStatus[colorIdx].color;
+                        }
+                    }
+                }
+            }
+
             return $el;
         }
 
@@ -279,7 +339,7 @@
          * @static
          * @summary set value into session storage
          * @param {String} key key of session storage
-         * @param {String} val value of session storage
+         * @param {*} val value of session storage
          */
         fmpooljs.setSessionItem = function (key, val) {
             session.setItem(key, val);
@@ -291,7 +351,7 @@
          * @access public
          * @static
          * @summary save value to session storage
-         * @param {*} key key of session storage
+         * @param {String} key key of session storage
          * @returns value of session storage
          */
         fmpooljs.getSessionItem = function (key) {
@@ -374,6 +434,57 @@
             });
 
         }
+
+        /**
+         * @function waitForElementToExist
+         * @access public
+         * @static
+         * @summary waits till the element exist (max waiting time 5000 ms).
+         * @example
+         * // waits till a element with class fusioncharts-container exists
+         * fmpooljs.waitForElementToExist(".fusioncharts-container", 
+         *  f => fmpooljs(".fusioncharts-container").setStandardStatusColor()
+         * );
+         * @param {String} selector select of element to appear
+         * @param {Function} callback callback as a lambda function i.e.: f => myFunction()
+         */
+        fmpooljs.waitForElementToExist = function (selector, callback) {
+            log("waitForElementToExist", selector, callback);
+            fmpooljs.waitForElementToExistWithCounter(selector, callback, 0);
+        }
+
+        /**
+         * @function waitForElementToExistWithCounter
+         * @access public
+         * @static
+         * @summary waits until the element exist or the counter is reached. Counter is a number under 9. Everytime the element is not found the counter is increased and waits for 500ms. When the counter reaches 10, the waiting is aborted.
+         * @example
+         * // waits max 2500 ms for a element with class fusioncharts-container to exist
+         * fmpooljs.waitForElementToExistWithCounter(".fusioncharts-container", 
+         *  f => fmpooljs(".fusioncharts-container").setStandardStatusColor(), 
+         *  5
+         * );
+         * @param {String} selector select of element to appear
+         * @param {Function} callback callback as a lambda function i.e.: f => myFunction()
+         */
+        fmpooljs.waitForElementToExistWithCounter = function (selector, callback, counter) {
+            log("waitForElementToExistWithCounter", selector, callback, counter);
+            var fmElement = fmpooljs(selector);
+            log(fmElement, fmElement.length);
+            if (fmElement.length > 0) {
+                callback();
+            } else {
+                counter++;
+                if (counter > 10) {
+                    return;
+                }
+                window.setTimeout(function () {
+                    fmpooljs.waitForElementToExistWithCounter(selector, callback, counter);
+                }, 500);
+            }
+        }
+
+
 
         fmpooljs.version = version;
 
