@@ -278,17 +278,18 @@
                 } else {
                     $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
                 }
-                addClickActionPaggingForTable(navwrapper, "fmpooljs_plus_ten", ".pss_actionname_nextpage");
-                addClickActionPaggingForTable(navwrapper, "fmpooljs_minus_ten", ".pss_actiontype_prevpage");
+                addClickActionPaggingForTable($el, navwrapper, "fmpooljs_plus_ten", ".pss_actionname_nextpage");
+                addClickActionPaggingForTable($el, navwrapper, "fmpooljs_minus_ten", ".pss_actiontype_prevpage");
                 return $el;
             }
 
             return $el;
         }
 
-        function addClickActionPaggingForTable(buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick) {
-            $el.find(selectorForButtonClick).on("click", function () {
-                $el.find('.pss_table').hide();
+        function addClickActionPaggingForTable(currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick) {
+            log("addClickActionPaggingForTable", currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick);
+            currentElement.find(selectorForButtonClick).on("click", function () {
+                currentElement.find('.pss_table').hide();
                 buttonWrapper.find('.pss_nav_count').hide();
                 buttonWrapper.append('<div class="fmpooljs_spinner  busy-outline"><div class="busy"></div></div>');
                 for (var i = 0; i < 10; i++) {
