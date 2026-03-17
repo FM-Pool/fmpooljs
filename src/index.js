@@ -278,21 +278,26 @@
                 } else {
                     $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
                 }
-
-                $el.find('.fmpooljs_plus_ten').on("click", function () {
-                    for (var i = 0; i < 10; i++) {
-                        $el.find('.pss_actionname_nextpage').click();
-                    }
-                });
-                $el.find('.fmpooljs_minus_ten').on("click", function () {
-                    for (var i = 0; i < 10; i++) {
-                        $el.find('.pss_actiontype_prevpage').click();
-                    }
-                });
+                addClickActionPaggingForTable(navwrapper, "fmpooljs_plus_ten", ".pss_actionname_nextpage");
+                addClickActionPaggingForTable(navwrapper, "fmpooljs_minus_ten", ".pss_actiontype_prevpage");
                 return $el;
             }
 
             return $el;
+        }
+
+        function addClickActionPaggingForTable(buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick) {
+            $el.find(selectorForButtonClick).on("click", function () {
+                $el.find('.pss_table').hide();
+                buttonWrapper.find('.pss_nav_count').hide();
+                buttonWrapper.append('<div class="fmpooljs_spinner  busy-outline"><div class="busy"></div></div>');
+                for (var i = 0; i < 10; i++) {
+                    $el.find(selectorButtonForAutomatedClick).click();
+                }
+                $(".fmpooljs_spinner").remove();
+                buttonWrapper.find('.pss_nav_count').show();
+                $el.find('.pss_table').show();
+            });
         }
 
         // --- Static helpers ---
