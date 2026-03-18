@@ -278,8 +278,8 @@
                 } else {
                     $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
                 }
-                addClickActionPaggingForTable($el, navwrapper, "fmpooljs_plus_ten", ".pss_actionname_nextpage");
-                addClickActionPaggingForTable($el, navwrapper, "fmpooljs_minus_ten", ".pss_actiontype_prevpage");
+                addClickActionPaggingForTable($el, navwrapper, ".fmpooljs_plus_ten", ".pss_actionname_nextpage");
+                addClickActionPaggingForTable($el, navwrapper, ".fmpooljs_minus_ten", ".pss_actiontype_prevpage");
                 return $el;
             }
 
