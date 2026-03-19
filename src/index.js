@@ -321,21 +321,34 @@
              */
             $el.addFastPaggingButtonToTable = function () {
                 var navwrapper = $el.find('.pss_navigation');
+                if($("div.fmpooljs_spinner").length == 0){
+                    $(".pss_content").append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');    
+                }
+                if($("div.fmpooljs_inline_spinner").length == 0){
+                    $(".pss_nav_count").before('<div class="fmpooljs_spinner fmpooljs_inline_spinner"><div class="pss_page_header busy"></div></div>');
+                }
+                
                 log("addFastPaggingButtonToTable", navwrapper, $el, fmpooljs.getSessionItem("fmpooljs_table_paging_action"));
                 $el.prepend('<style>.fmpooljs_minus_ten::before { content: "\\f01f9" !important; font-family: "Planon-icons"; }</style>');
                 $el.prepend('<style>.fmpooljs_plus_ten::before { content: "\\f01fc" !important; font-family: "Planon-icons"; }</style>');
-                $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table, body.fmpooljs_table_paging_action .pss_nav_count { display: none; }</style>');
+                $el.prepend('<style>body div.fmpooljs_inline_spinner { position: relative; left: 0; top: 0; }</style>');
+                $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header { padding: 0 !important; }</style>');
+                $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header.busy::before { position: relative !important; }</style>');
+                $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table tbody, body.fmpooljs_table_paging_action .pss_nav_count { display: none !important; }</style>');
 
                 if(fmpooljs.getSessionItem("fmpooljs_table_paging_action") == 1) {
-                    buttonWrapper.append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
+                    $("div.fmpooljs_spinner").show();
                     $('body').addClass("fmpooljs_table_paging_action");
                     var pageStep = fmpooljs.getSessionItem("fmpooljs_table_paging_action_page");
                     pageStep++;
-                    if(pageStep < 10){
+                    if(pageStep < 9){
                         fmpooljs.setSessionItem("fmpooljs_table_paging_action_page", pageStep);
                     } else {
                         fmpooljs.setSessionItem("fmpooljs_table_paging_action",0);
                     }
+                } else {
+                    $("div.fmpooljs_spinner").hide();
+                    $('body').removeClass("fmpooljs_table_paging_action");
                 }
                 navwrapper.prepend('<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
                 navwrapper.append('<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
