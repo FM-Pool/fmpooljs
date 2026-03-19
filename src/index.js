@@ -325,6 +325,10 @@
                 $el.prepend('<style>.fmpooljs_minus_ten::before { content: "\\f01f9" !important; font-family: "Planon-icons"; }</style>');
                 $el.prepend('<style>.fmpooljs_plus_ten::before { content: "\\f01fc" !important; font-family: "Planon-icons"; }</style>');
                 $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table, body.fmpooljs_table_paging_action .pss_nav_count { display: none; }</style>');
+
+                if(fmpooljs.getSessionItem("fmpooljs_table_paging_action") == 1) {
+                    $('body').addClass("fmpooljs_table_paging_action");
+                }
                 navwrapper.prepend('<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
                 navwrapper.append('<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
 
@@ -347,13 +351,15 @@
 
             function addClickActionPaggingForTable(currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick) {
                 log("addClickActionPaggingForTable", currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick);
-                buttonWrapper.append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
                 currentElement.find(selectorForButtonClick).on("click", function () {
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_action",1);
+                    buttonWrapper.append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
                     $('body').addClass("fmpooljs_table_paging_action");
                     for (var i = 0; i < 10; i++) {
                         $el.find(selectorButtonForAutomatedClick).click();
                     }
                     $(".fmpooljs_spinner").remove();
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_action", 0);
                     $('body').removeClass("fmpooljs_table_paging_action");
                 });
                 
