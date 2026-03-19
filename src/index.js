@@ -347,15 +347,15 @@
             function addClickActionPaggingForTable(currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick) {
                 log("addClickActionPaggingForTable", currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick);
                 currentElement.find(selectorForButtonClick).on("click", function () {
-                    currentElement.find('.pss_table').hide();
-                    buttonWrapper.find('.pss_nav_count').hide();
-                    buttonWrapper.append('<div class="fmpooljs_spinner  busy-outline"><div class="busy"></div></div>');
                     for (var i = 0; i < 10; i++) {
+                        currentElement.find('.pss_table').hide();
+                        buttonWrapper.find('.pss_nav_count').hide();
+                        buttonWrapper.append('<div class="fmpooljs_spinner  busy-outline"><div class="busy"></div></div>');
                         $el.find(selectorButtonForAutomatedClick).click();
                     }
                     $(".fmpooljs_spinner").remove();
                     buttonWrapper.find('.pss_nav_count').show();
-                    $el.find('.pss_table').show();
+                    currentElement.find('.pss_table').show();
                 });
             }
 
