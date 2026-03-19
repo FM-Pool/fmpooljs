@@ -357,6 +357,7 @@
                     buttonWrapper.append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
                     $('body').addClass("fmpooljs_table_paging_action");
                     for (var i = 0; i < 10; i++) {
+                        fmpooljs.setSessionItem("fmpooljs_table_paging_action_page",i);
                         $el.find(selectorButtonForAutomatedClick).click();
                     }
                     $(".fmpooljs_spinner").remove();
