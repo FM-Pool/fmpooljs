@@ -327,7 +327,15 @@
                 $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table, body.fmpooljs_table_paging_action .pss_nav_count { display: none; }</style>');
 
                 if(fmpooljs.getSessionItem("fmpooljs_table_paging_action") == 1) {
+                    buttonWrapper.append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
                     $('body').addClass("fmpooljs_table_paging_action");
+                    var pageStep = fmpooljs.getSessionItem("fmpooljs_table_paging_action_page");
+                    pageStep++;
+                    if(pageStep < 10){
+                        fmpooljs.setSessionItem("fmpooljs_table_paging_action_page", pageStep);
+                    } else {
+                        fmpooljs.setSessionItem("fmpooljs_table_paging_action",0);
+                    }
                 }
                 navwrapper.prepend('<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
                 navwrapper.append('<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
@@ -354,15 +362,14 @@
                 currentElement.find(selectorForButtonClick).on("click", function () {
                     log("addClickActionPaggingForTable clicked", buttonWrapper);
                     fmpooljs.setSessionItem("fmpooljs_table_paging_action",1);
-                    buttonWrapper.append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
-                    $('body').addClass("fmpooljs_table_paging_action");
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_action_page",0);
+                    //$('body').addClass("fmpooljs_table_paging_action");
                     for (var i = 0; i < 10; i++) {
-                        fmpooljs.setSessionItem("fmpooljs_table_paging_action_page",i);
                         $el.find(selectorButtonForAutomatedClick).click();
                     }
-                    $(".fmpooljs_spinner").remove();
-                    fmpooljs.setSessionItem("fmpooljs_table_paging_action", 0);
-                    $('body').removeClass("fmpooljs_table_paging_action");
+                    //$(".fmpooljs_spinner").remove();
+                    // fmpooljs.setSessionItem("fmpooljs_table_paging_action", 0);
+                    // $('body').removeClass("fmpooljs_table_paging_action");
                 });
                 
             }
