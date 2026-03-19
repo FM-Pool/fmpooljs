@@ -321,7 +321,7 @@
              */
             $el.addFastPaggingButtonToTable = function () {
                 var navwrapper = $el.find('.pss_navigation');
-                log("addFastPaggingButtonToTable", navwrapper, $el);
+                log("addFastPaggingButtonToTable", navwrapper, $el, fmpooljs.getSessionItem("fmpooljs_table_paging_action"));
                 $el.prepend('<style>.fmpooljs_minus_ten::before { content: "\\f01f9" !important; font-family: "Planon-icons"; }</style>');
                 $el.prepend('<style>.fmpooljs_plus_ten::before { content: "\\f01fc" !important; font-family: "Planon-icons"; }</style>');
                 $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table, body.fmpooljs_table_paging_action .pss_nav_count { display: none; }</style>');
@@ -352,6 +352,7 @@
             function addClickActionPaggingForTable(currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick) {
                 log("addClickActionPaggingForTable", currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick);
                 currentElement.find(selectorForButtonClick).on("click", function () {
+                    log("addClickActionPaggingForTable clicked", buttonWrapper);
                     fmpooljs.setSessionItem("fmpooljs_table_paging_action",1);
                     buttonWrapper.append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
                     $('body').addClass("fmpooljs_table_paging_action");
