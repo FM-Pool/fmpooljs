@@ -321,16 +321,18 @@
              */
             $el.addFastPaggingButtonToTable = function () {
                 var navwrapper = $el.find('.pss_navigation');
+                console.log($("div.fmpooljs_spinner"));
                 if($("div.fmpooljs_spinner").length == 0){
                     $(".pss_content").append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');    
                 }
                 if($("div.fmpooljs_inline_spinner").length == 0){
                     $(".pss_nav_count").before('<div class="fmpooljs_spinner fmpooljs_inline_spinner"><div class="pss_page_header busy"></div></div>');
                 }
-                
                 log("addFastPaggingButtonToTable", navwrapper, $el, fmpooljs.getSessionItem("fmpooljs_table_paging_action"));
                 $el.prepend('<style>.fmpooljs_minus_ten::before { content: "\\f01f9" !important; font-family: "Planon-icons"; }</style>');
                 $el.prepend('<style>.fmpooljs_plus_ten::before { content: "\\f01fc" !important; font-family: "Planon-icons"; }</style>');
+                $el.prepend('<style>.fmpooljs_first_page::before { content: "\\f023b" !important; font-family: "Planon-icons"; }</style>');
+                $el.prepend('<style>.fmpooljs_last_page::before { content: "\\f023a" !important; font-family: "Planon-icons"; }</style>');
                 $el.prepend('<style>body div.fmpooljs_inline_spinner { position: relative; left: 0; top: 0; }</style>');
                 $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header { padding: 0 !important; }</style>');
                 $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header.busy::before { position: relative !important; }</style>');
@@ -351,19 +353,31 @@
                     $('body').removeClass("fmpooljs_table_paging_action");
                 }
                 navwrapper.prepend('<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
+                navwrapper.prepend('<button class="fmpooljs_first_page pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
                 navwrapper.append('<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
-
+                navwrapper.append('<button class="fmpooljs_last_page pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
+                /*
+                for(i = 983539;i < 983539 +200; i++ ) {
+                    var hex = i.toString(16);
+                    $el.prepend('<style>.test_' + i + '::before { content: "\\' + hex + '" !important; font-family: "Planon-icons"; }</style>');
+                    $(".pss_block_list_table").append('<div class="test_' + i + '">' + hex +'</div>');
+                }
+                */
                 // set the correct disable status
                 if ($el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
                     $el.find('.fmpooljs_minus_ten').addClass('pss_disabled');
+                    $el.find('.fmpooljs_first_page').addClass('pss_disabled');
                 } else {
                     $el.find('.fmpooljs_minus_ten').removeClass('pss_disabled');
+                    $el.find('.fmpooljs_first_page').removeClass('pss_disabled');
                 }
 
                 if ($el.find('.pss_actionname_nextpage').hasClass('pss_disabled')) {
                     $el.find('.fmpooljs_plus_ten').addClass('pss_disabled');
+                    $el.find('.fmpooljs_last_page').addClass('pss_disabled');
                 } else {
                     $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
+                    $el.find('.fmpooljs_last_page').removeClass('pss_disabled');
                 }
                 addClickActionPaggingForTable($el, navwrapper, ".fmpooljs_plus_ten", ".pss_actionname_nextpage");
                 addClickActionPaggingForTable($el, navwrapper, ".fmpooljs_minus_ten", ".pss_actiontype_prevpage");
