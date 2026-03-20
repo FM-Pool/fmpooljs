@@ -320,8 +320,8 @@
              * @returns fmpooljs object
              */
             $el.addFastPaggingButtonToTable = function () {
-                var navwrapper = $el.find('.pss_navigation');
-                console.log($("div.fmpooljs_spinner"));
+                var navwrapper = $el.find('.pss_navigation');                
+                
                 if($("div.fmpooljs_spinner").length == 0){
                     $(".pss_content").append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');    
                 }
@@ -336,8 +336,28 @@
                 $el.prepend('<style>body div.fmpooljs_inline_spinner { position: relative; left: 0; top: 0; }</style>');
                 $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header { padding: 0 !important; }</style>');
                 $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header.busy::before { position: relative !important; }</style>');
-                $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table tbody, body.fmpooljs_table_paging_action .pss_nav_count { display: none !important; }</style>');
+                //$el.prepend('<style>body.fmpooljs_table_paging_action .pss_table tbody, body.fmpooljs_table_paging_action .pss_nav_count { display: none !important; }</style>');
 
+                var hasNext = true;
+                var hasPrev = true;
+                // set the correct disable status
+                if ($el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
+                    $el.find('.fmpooljs_minus_ten').addClass('pss_disabled');
+                    $el.find('.fmpooljs_first_page').addClass('pss_disabled');
+                    hasNext= false;
+                } else {
+                    $el.find('.fmpooljs_minus_ten').removeClass('pss_disabled');
+                    $el.find('.fmpooljs_first_page').removeClass('pss_disabled');
+                }
+                if ($el.find('.pss_actionname_nextpage').hasClass('pss_disabled')) {
+                    hasPrev = false;
+                    $el.find('.fmpooljs_plus_ten').addClass('pss_disabled');
+                    $el.find('.fmpooljs_last_page').addClass('pss_disabled');
+                } else {
+                    $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
+                    $el.find('.fmpooljs_last_page').removeClass('pss_disabled');
+                }
+                
                 if(fmpooljs.getSessionItem("fmpooljs_table_paging_action") == 1) {
                     $("div.fmpooljs_spinner").show();
                     $('body').addClass("fmpooljs_table_paging_action");
@@ -348,10 +368,33 @@
                     } else {
                         fmpooljs.setSessionItem("fmpooljs_table_paging_action",0);
                     }
+                } else if (fmpooljs.getSessionItem("fmpooljs_table_paging_action") == 2) {
+                    $("div.fmpooljs_spinner").show();
+                    $('body').addClass("fmpooljs_table_paging_action");
+                    var btnSelector = fmpooljs.getSessionItem("fmpooljs_table_paging_button_selector");
+                    console.log([btnSelector, hasPrev, hasNext]);
+                    if(btnSelector == '.fmpooljs_first_page') {
+                        if(hasPrev){
+                            $el.find(".pss_actiontype_prevpage").click();
+                        } else {
+                            fmpooljs.setSessionItem("fmpooljs_table_paging_action",0);
+                        }
+                    }
+                    if(btnSelector == '.fmpooljs_last_page') {
+                        console.log(["in if", $el.find(".pss_actionname_nextpage"), hasNext]);
+                        if(hasNext){
+                            console.log(["now click", $el.find(".pss_actionname_nextpage"), hasNext]);
+                            $el.find(".pss_actionname_nextpage").click();
+                        } else {
+                            fmpooljs.setSessionItem("fmpooljs_table_paging_action",0);
+                        }
+                    }
+                    
                 } else {
                     $("div.fmpooljs_spinner").hide();
                     $('body').removeClass("fmpooljs_table_paging_action");
                 }
+    
                 navwrapper.prepend('<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
                 navwrapper.prepend('<button class="fmpooljs_first_page pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
                 navwrapper.append('<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
@@ -363,35 +406,22 @@
                     $(".pss_block_list_table").append('<div class="test_' + i + '">' + hex +'</div>');
                 }
                 */
-                // set the correct disable status
-                if ($el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
-                    $el.find('.fmpooljs_minus_ten').addClass('pss_disabled');
-                    $el.find('.fmpooljs_first_page').addClass('pss_disabled');
-                } else {
-                    $el.find('.fmpooljs_minus_ten').removeClass('pss_disabled');
-                    $el.find('.fmpooljs_first_page').removeClass('pss_disabled');
-                }
-
-                if ($el.find('.pss_actionname_nextpage').hasClass('pss_disabled')) {
-                    $el.find('.fmpooljs_plus_ten').addClass('pss_disabled');
-                    $el.find('.fmpooljs_last_page').addClass('pss_disabled');
-                } else {
-                    $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
-                    $el.find('.fmpooljs_last_page').removeClass('pss_disabled');
-                }
-                addClickActionPaggingForTable($el, navwrapper, ".fmpooljs_plus_ten", ".pss_actionname_nextpage");
-                addClickActionPaggingForTable($el, navwrapper, ".fmpooljs_minus_ten", ".pss_actiontype_prevpage");
+                
+                addClickActionPaggingForTable($el, ".fmpooljs_plus_ten", ".pss_actionname_nextpage", 1, 10);
+                addClickActionPaggingForTable($el, ".fmpooljs_minus_ten", ".pss_actiontype_prevpage", 1, 10);
+                addClickActionPaggingForTable($el, ".fmpooljs_last_page", ".pss_actionname_nextpage", 2, 1);
+                addClickActionPaggingForTable($el, ".fmpooljs_first_page", ".pss_actiontype_prevpage", 2, 1);
                 return $el;
             }
 
-            function addClickActionPaggingForTable(currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick) {
-                log("addClickActionPaggingForTable", currentElement, buttonWrapper, selectorForButtonClick, selectorButtonForAutomatedClick);
+            function addClickActionPaggingForTable(currentElement, selectorForButtonClick, selectorButtonForAutomatedClick, mode, count) {
+                log("addClickActionPaggingForTable", currentElement, selectorForButtonClick, selectorButtonForAutomatedClick);
                 currentElement.find(selectorForButtonClick).on("click", function () {
-                    log("addClickActionPaggingForTable clicked", buttonWrapper);
-                    fmpooljs.setSessionItem("fmpooljs_table_paging_action",1);
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_action", mode);
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_button_selector", selectorForButtonClick);
                     fmpooljs.setSessionItem("fmpooljs_table_paging_action_page",0);
                     //$('body').addClass("fmpooljs_table_paging_action");
-                    for (var i = 0; i < 10; i++) {
+                    for (var i = 0; i < count; i++) {
                         $el.find(selectorButtonForAutomatedClick).click();
                     }
                     //$(".fmpooljs_spinner").remove();
