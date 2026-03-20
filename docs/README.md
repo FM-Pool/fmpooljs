@@ -57,6 +57,7 @@ fmpooljs uses jquery to select elements from the DOM.
         * [~clearOnSessionValueCondition(key, predict)](#module_fmpooljs..clearOnSessionValueCondition) ⇒
         * [~prefillFromStore(key)](#module_fmpooljs..prefillFromStore) ⇒
         * [~setStandardStatusColor()](#module_fmpooljs..setStandardStatusColor) ⇒
+        * [~addFastPaggingButtonToTable()](#module_fmpooljs..addFastPaggingButtonToTable) ⇒
 
 <a name="module_fmpooljs.setSessionItem"></a>
 
@@ -132,7 +133,10 @@ fmpooljs uses jquery to select elements from the DOM.
 
 **Example**  
 ```js
-// waits till a element with class fusioncharts-container existsfmpooljs.waitForElementToExist(".fusioncharts-container",  f => fmpooljs(".fusioncharts-container").setStandardStatusColor());
+// waits till a element with class fusioncharts-container exists
+fmpooljs.waitForElementToExist(".fusioncharts-container", 
+ f => fmpooljs(".fusioncharts-container").setStandardStatusColor()
+);
 ```
 <a name="module_fmpooljs.waitForElementToExistWithCounter"></a>
 
@@ -148,7 +152,11 @@ fmpooljs uses jquery to select elements from the DOM.
 
 **Example**  
 ```js
-// waits max 2500 ms for a element with class fusioncharts-container to existfmpooljs.waitForElementToExistWithCounter(".fusioncharts-container",  f => fmpooljs(".fusioncharts-container").setStandardStatusColor(),  5);
+// waits max 2500 ms for a element with class fusioncharts-container to exist
+fmpooljs.waitForElementToExistWithCounter(".fusioncharts-container", 
+ f => fmpooljs(".fusioncharts-container").setStandardStatusColor(), 
+ 5
+);
 ```
 <a name="module_fmpooljs..readonly"></a>
 
@@ -264,5 +272,18 @@ Works only with fields which are configured with "Allowed select actions: 'Pop-u
 **See**: waitForElementToExist  
 **Example**  
 ```js
-// it might be needed to wait for the fusion chart container to exist (see waitForElementToExist). Should be used in the JavaScript tab of the chart.fmpooljs(".fusioncharts-container").setStandardStatusColor();
+// it might be needed to wait for the fusion chart container to exist (see waitForElementToExist). Should be used in the JavaScript tab of the chart.
+fmpooljs(".fusioncharts-container").setStandardStatusColor();
+```
+<a name="module_fmpooljs..addFastPaggingButtonToTable"></a>
+
+### fmpooljs~addFastPaggingButtonToTable() ⇒
+**Kind**: inner method of [<code>fmpooljs</code>](#module_fmpooljs)  
+**Summary**: adds a pagging button to a table which goes 10 pages further or back.  
+**Returns**: fmpooljs object  
+**Access**: public  
+**Example**  
+```js
+// add in JS tab of List block
+fmpooljs(this).addFastPaggingButtonToTable();
 ```
