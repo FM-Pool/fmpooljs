@@ -383,8 +383,18 @@
                     if(btnSelector == '.fmpooljs_last_page') {
                         console.log(["in if", $el.find(".pss_actionname_nextpage"), hasNext]);
                         if(hasNext){
-                            console.log(["now click", $el.find(".pss_actionname_nextpage"), hasNext]);
-                            $el.find(".pss_actionname_nextpage").click();
+                            console.log(["now click", $el.find(".pss_actionname_nextpage").attr('class'), hasNext]);
+                            console.log([$el.find(".pss_actionname_nextpage")[0].isConnected], $el.find(".pss_actionname_nextpage"), 
+                                        fmpooljs(".pss_actionname_nextpage")[0].disabled, $(".pss_actionname_nextpage")[0]);
+                            console.log($._data($(".pss_actionname_nextpage")[0], 'events'));
+                            fmpooljs.waitForElementToExist(".pss_actionname_nextpage", 
+                               f => fmpooljs(".pss_actionname_nextpage").click()
+                              );
+                            waitForClickHandler('.pss_actionname_nextpage', () => {
+                                console.log('Click handler attached!');
+                                fmpooljs(".pss_actionname_nextpage").click();
+                            });
+                            //$el.find(".pss_actionname_nextpage").click();
                         } else {
                             fmpooljs.setSessionItem("fmpooljs_table_paging_action",0);
                         }
@@ -412,6 +422,20 @@
                 addClickActionPaggingForTable($el, ".fmpooljs_last_page", ".pss_actionname_nextpage", 2, 1);
                 addClickActionPaggingForTable($el, ".fmpooljs_first_page", ".pss_actiontype_prevpage", 2, 1);
                 return $el;
+            }
+
+            function waitForClickHandler(selector, callback) {
+                const interval = setInterval(() => {
+                    const el = $(selector)[0];
+                    if (!el) return;
+            
+                    const events = $._data(el, 'events');
+            
+                    if (events && events.click && events.click.length > 0) {
+                        clearInterval(interval);
+                        callback();
+                    }
+                }, 50);
             }
 
             function addClickActionPaggingForTable(currentElement, selectorForButtonClick, selectorButtonForAutomatedClick, mode, count) {
