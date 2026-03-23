@@ -337,12 +337,16 @@
                 $el.prepend('<style>body div.fmpooljs_inline_spinner { position: relative; left: 0; top: 0; }</style>');
                 $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header { padding: 0 !important; }</style>');
                 $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header.busy::before { position: relative !important; }</style>');
-                $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table tbody, body.fmpooljs_table_paging_action .pss_nav_count { display: none !important; }</style>');
+                $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table, body.fmpooljs_table_paging_action .pss_nav_count { display: none !important; }</style>');
 
-                navwrapper.prepend('<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
-                navwrapper.prepend('<button class="fmpooljs_first_page pss_action pss_nav_prev" type="button" role="button"><span class="pss_action_label"></span></button>');
-                navwrapper.append('<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
-                navwrapper.append('<button class="fmpooljs_last_page pss_action pss_nav_next" type="button" role="button"><span class="pss_action_label"></span></button>');
+                navwrapper.prepend(`<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.PREVIOUS)}">
+                                    <span class="pss_action_label"></span></button>`);
+                navwrapper.prepend(`<button class="fmpooljs_first_page pss_action pss_nav_prev" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.START)}">
+                                    <span class="pss_action_label"></span></button>`);
+                navwrapper.append(`<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.NEXT)}">
+                                    <span class="pss_action_label"></span></button>`);
+                navwrapper.append(`<button class="fmpooljs_last_page pss_action pss_nav_next" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.END)}">
+                                    <span class="pss_action_label"></span></button>`);
 
                 var hasNext = true;
                 var hasPrev = true;
@@ -409,6 +413,59 @@
                 return $el;
             }
 
+            const TablePaggingButtonTypes = Object.freeze({
+                NEXT: 'NEXT',
+                PREVIOUS: 'PREVIOUS',
+                START: 'START',
+                END: 'END'
+            });
+
+            const Languages = Object.freeze({
+                EN: 'EN',
+                IT: 'IT',
+                DE: 'DE',
+                FALLBACK: 'EN'
+            });
+
+            const TablePaggingButtonTooltips = Object.freeze({
+                [Languages.DE]: {
+                    [TablePaggingButtonTypes.NEXT]: "10 Seiten weiter",
+                    [TablePaggingButtonTypes.PREVIOUS]: "10 Seiten zurück",
+                    [TablePaggingButtonTypes.START]: "Zur ersten Seite",
+                    [TablePaggingButtonTypes.END]: "Zur letzten Seite",
+                },
+                [Languages.EN]: {
+                    [TablePaggingButtonTypes.NEXT]: "Next 10 pages",
+                    [TablePaggingButtonTypes.PREVIOUS]: "Previous 10 pages",
+                    [TablePaggingButtonTypes.START]: "Frist page",
+                    [TablePaggingButtonTypes.END]: "Last page",
+                },
+                [Languages.IT]: {
+                    [TablePaggingButtonTypes.NEXT]: "Prossime 10 pagine",
+                    [TablePaggingButtonTypes.PREVIOUS]: "10 pagine precedenti",
+                    [TablePaggingButtonTypes.START]: "Prima pagina",
+                    [TablePaggingButtonTypes.END]: "Ultima pagina",
+                }
+            });
+
+            function getTablePaggingTooltip(buttonType) {
+                var lang = getLang();
+                return TablePaggingButtonTooltips[lang][buttonType];
+            }
+
+            function getLang(lang) {
+                var metaLang = $("html").attr("lang");
+                var lang = Languages.FALLBACK;
+                if (metaLang) {
+                    for (const [value] of Object.entries(Languages)) {
+                        if (value == metaLang.toUpperCase()) {
+                            lang = value;
+                        }
+                    }
+                }
+                return lang;
+            }
+
             function stopPagging() {
                 log("stop pagging");
                 fmpooljs.setSessionItem("fmpooljs_table_paging_action", 0);
@@ -417,7 +474,7 @@
             }
 
             function clickNextTableButton(selector, hasNext, hasPrev) {
-                log(["clickNextTableButton", selector, hasNext, hasPrev]);                
+                log(["clickNextTableButton", selector, hasNext, hasPrev]);
                 var couldBeClicked = false;
                 if ((selector == ".pss_actionname_nextpage" && hasNext)
                     || (selector == ".pss_actiontype_prevpage" && hasPrev)) {
