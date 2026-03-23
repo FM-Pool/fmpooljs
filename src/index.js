@@ -435,16 +435,16 @@
                     [TablePaggingButtonTypes.END]: "Zur letzten Seite",
                 },
                 [Languages.EN]: {
-                    [TablePaggingButtonTypes.NEXT]: "Next 10 pages",
-                    [TablePaggingButtonTypes.PREVIOUS]: "Previous 10 pages",
-                    [TablePaggingButtonTypes.START]: "Frist page",
-                    [TablePaggingButtonTypes.END]: "Last page",
+                    [TablePaggingButtonTypes.NEXT]: "10 pages forward",
+                    [TablePaggingButtonTypes.PREVIOUS]: "10 pages backward",
+                    [TablePaggingButtonTypes.START]: "Go to first page",
+                    [TablePaggingButtonTypes.END]: "Go to last page",
                 },
                 [Languages.IT]: {
-                    [TablePaggingButtonTypes.NEXT]: "Prossime 10 pagine",
-                    [TablePaggingButtonTypes.PREVIOUS]: "10 pagine precedenti",
-                    [TablePaggingButtonTypes.START]: "Prima pagina",
-                    [TablePaggingButtonTypes.END]: "Ultima pagina",
+                    [TablePaggingButtonTypes.NEXT]: "10 pagine avanti",
+                    [TablePaggingButtonTypes.PREVIOUS]: "10 pagine indietro",
+                    [TablePaggingButtonTypes.START]: "Alla prima pagina",
+                    [TablePaggingButtonTypes.END]: "All'ultima pagina",
                 }
             });
 
