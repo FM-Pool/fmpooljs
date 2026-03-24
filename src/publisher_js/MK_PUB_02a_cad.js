@@ -1,7 +1,6 @@
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
     const encodedData = urlParams.get('data');
-    
     const currentLang = urlParams.get('lang') || 'de'; 
     if (!encodedData) return;
 
@@ -11,7 +10,6 @@
         item = JSON.parse(decodedStr)[0];
     } catch (e) { return; }
 
-   
     const translations = {
         de: "Automatisches Ausfüllen läuft...",
         it: "Compilazione automatica in corso...",
@@ -20,20 +18,26 @@
 
     const overlayId = 'autofill-overlay';
     
+    const fieldClasses = {
+        edificio: 'pss_fieldname_propertyref',
+        piano: 'pss_fieldname_pubcadviewerfloor',
+        darstellung: 'pss_fieldname_pubcadviewerspacemapping',
+        datum: 'pss_fieldname_floorattributeenddate'
+    };
+
     const hideContainer = (selector) => {
         const el = document.querySelector(selector);
-        const container = el?.closest('.pss_field, .pss_field_container');
-        if (container) {
-            container.style.setProperty('display', 'none', 'important');
+        if (el) {
+            el.style.setProperty('display', 'none', 'important');
         }
     };
 
     const injectFinalHideStyle = () => {
         const style = document.createElement('style');
         style.textContent = `
-            .pss_fieldname_propertyref, 
-            .pss_fieldname_pubcadviewerspacemapping, 
-            .pss_fieldname_floorattributeenddate { 
+            .${fieldClasses.edificio}, 
+            .${fieldClasses.darstellung}, 
+            .${fieldClasses.datum} { 
                 display: none !important; 
             }
         `;
@@ -43,7 +47,6 @@
     function showOverlay() {
         if (document.getElementById(overlayId)) return;
         const msg = translations[currentLang] || translations.de;
-        
         const overlay = document.createElement('div');
         overlay.id = overlayId;
         overlay.innerHTML = `
@@ -57,15 +60,13 @@
         document.body.appendChild(overlay);
     }
 
-    const handlePopup = (searchLabels, searchValue, classToHide) => {
+    const handlePopup = (targetClass, searchValue, shouldHide) => {
         return new Promise((resolve) => {
-            let openBtn = null;
-            for (let label of searchLabels) {
-                const input = document.querySelector(`input[aria-label*="${label}"]`);
-                const container = input?.closest('.pss_field, .pss_field_container, td');
-                openBtn = container?.querySelector('a.pss_action, button.pss_action, .pnicon-chevron-right-light');
-                if (openBtn) break;
-            }
+            const container = document.querySelector(`.${targetClass}`);
+            if (!container) return resolve(false);
+
+            const openBtn = container.querySelector('a.pss_action, button.pss_action, .pnicon-chevron-right-light, .pnicon-chevron-right');
+            
             if (!openBtn) return resolve(false);
 
             setTimeout(() => {
@@ -74,7 +75,7 @@
                     const modal = document.querySelector('.modal-dialog, .pss_modal');
                     if (modal && modal.offsetParent !== null) {
                         modal.style.setProperty('opacity', '0.01', 'important');
-                        const rows = Array.from(modal.querySelectorAll('tr.aria_row, tr.row_title'));
+                        const rows = Array.from(modal.querySelectorAll('tr.aria_row, tr.row_title, tr.pss_row'));
                         const match = rows.find(r => r.innerText.includes(searchValue));
 
                         if (match) {
@@ -83,7 +84,7 @@
                             if (selectBtn) selectBtn.click(); else match.click();
                             
                             setTimeout(() => {
-                                if (classToHide !== 'none') hideContainer(`.${classToHide}`);
+                                if (shouldHide) hideContainer(`.${targetClass}`);
                                 resolve(true);
                             }, 300);
                         }
@@ -96,32 +97,30 @@
 
     const runWorkflow = async () => {
         showOverlay();
-        
         try {
-            
-            await handlePopup(['Edificio', 'Gebäude', 'Property'], item.edificio, 'pss_fieldname_propertyref');
+            await handlePopup(fieldClasses.edificio, item.edificio, true);
+            await new Promise(r => setTimeout(r, 600));
+
+            await handlePopup(fieldClasses.piano, item.piano, false);
             await new Promise(r => setTimeout(r, 600));
 
             
-            await handlePopup(['Piano', 'Stockwerk', 'Floor'], item.piano, 'none');
-            await new Promise(r => setTimeout(r, 600));
-
-            
-            const selects = document.querySelectorAll('select');
-            selects.forEach(s => {
-                const opt = Array.from(s.options).find(o => o.text.includes('MK_CAD_SelectedMoveRequest'));
-                if (opt) {
-                    s.value = opt.value;
-                    s.dispatchEvent(new Event('change', { bubbles: true }));
+            const darstellungContainer = document.querySelector(`.${fieldClasses.darstellung}`);
+            if (darstellungContainer) {
+                const select = darstellungContainer.querySelector('select');
+                if (select) {
+                    const opt = Array.from(select.options).find(o => o.text.includes('MK_CAD_SelectedMoveRequest'));
+                    if (opt) {
+                        select.value = opt.value;
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
                 }
-            });
+            }
 
-           
             injectFinalHideStyle();
-            hideContainer('.pss_fieldname_pubcadviewerspacemapping');
-            hideContainer('.pss_fieldname_floorattributeenddate');
+            hideContainer(`.${fieldClasses.darstellung}`);
+            hideContainer(`.${fieldClasses.datum}`);
 
-       
             setTimeout(() => {
                 const goBtn = document.querySelector('.go, button.pss_button_main, a[aria-label*="Weiter"], a[aria-label*="Avanti"], a[aria-label*="Continue"]');
                 if (goBtn) goBtn.click();
@@ -129,12 +128,14 @@
             }, 1000);
 
         } catch (e) {
+            console.error("Autofill error:", e);
             document.getElementById(overlayId)?.remove();
         }
     };
 
+
     const startRetry = setInterval(() => {
-        const check = document.querySelector('input[aria-label*="Edificio"], input[aria-label*="Gebäude"], input[aria-label*="Property"]');
+        const check = document.querySelector(`.${fieldClasses.edificio}`);
         if (check && check.offsetParent !== null) {
             clearInterval(startRetry);
             runWorkflow();

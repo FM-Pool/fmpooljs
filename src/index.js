@@ -277,14 +277,14 @@
              * @summary extracst the first occurrence of a order number from the text within the element.
              * @returns orderNumber
              */
-            $el.extractOrderNumberFromText = function() {
+            $el.extractOrderNumberFromText = function () {
                 log("Extract order number from text", $el);
-                if($el) {
+                if ($el) {
                     var elementText = $el.text();
                     const regEx = /\d+(\.)\d+/g;
                     var res = regEx.exec(elementText);
                     log("Regex operation", elementText, res);
-                    if(res != null){ 
+                    if (res != null) {
                         return res[0];
                     }
                 }
@@ -329,72 +329,86 @@
                 }
             }
 
-$el.injectPublisherButton = function() {
-        // sprachelement als ankerpunkt nutzen damit der button oben im menü bleibt
-        const $langTarget = $('.pss_actiontype_continue');
-        
-        // nur einfügen wenn der anker da ist und der button nicht schon existiert
-        if (!$langTarget.length || $('#planon-publisher-btn').length) return;
+            $el.injectPublisherButton = function () {
+                info("injectPublisherButton start");
+    const $langTarget = $('.pss_actiontype_continue');
 
-        // sprache aus html tag holen für die button beschriftung
-        const htmlLang = $('html').attr('lang') || 'de';
-        let detectedLang = 'de';
-        let buttonText = 'Zum Lageplan';
+    if (!$langTarget.length) {
+        log("Abort: .pss_actiontype_continue not found");
+        return;
+    }
+    if ($('#planon-publisher-btn').length) {
+        log("Abort: Button already exists");
+        return;
+    }
 
-        if (htmlLang.includes('it')) { 
-            detectedLang = 'it'; 
-            buttonText = 'Alla planimetria'; 
-        } else if (htmlLang.includes('en')) { 
-            detectedLang = 'en'; 
-            buttonText = 'To the floor plan'; 
+    const htmlLang = $('html').attr('lang') || 'de';
+    let detectedLang = 'de';
+    let buttonText = 'Zum Lageplan';
+
+    if (htmlLang.includes('it')) {
+        detectedLang = 'it';
+        buttonText = 'Alla planimetria';
+    } else if (htmlLang.includes('en')) {
+        detectedLang = 'en';
+        buttonText = 'To the floor plan';
+    }
+    
+    info("Language detected", { htmlLang, detectedLang });
+
+    const $pubButton = $('<a>', {
+        id: 'planon-publisher-btn',
+        class: 'pss_action pss_button',
+        href: 'javascript:void(0);',
+        css: {
+            'background-color': '#00b2ee',
+            'color': '#ffffff',
+            'margin-left': '10px',
+            'cursor': 'pointer'
         }
+    }).append($('<span>', { class: 'pss_action_label', text: buttonText }));
 
-        const $pubButton = $('<a>', {
-            id: 'planon-publisher-btn',
-            class: 'pss_action pss_button', // planon styles nutzen für saubere optik
-            href: 'javascript:void(0);',
-            css: { 
-                'background-color': '#00b2ee', 
-                'color': '#ffffff', 
-                'margin-left': '10px', 
-                'cursor': 'pointer' 
-            }
-        }).append($('<span>', { class: 'pss_action_label', text: buttonText }));
+    $pubButton.on('click', function (e) {
+        info("Publisher button clicked");
+        e.preventDefault();
+        let results = [];
 
-        $pubButton.on('click', function(e) {
-            e.preventDefault();
-            let results = [];
-            
-            // alle zeilen durchgehen und daten ziehen
-            $('tr').each(function() {
-                const $row = $(this);
-                // technische planon selektoren verwenden (review punkt!)
-                const $edi = $row.find('.pss_fieldname_propertyfromref');
-                const $pia = $row.find('.pss_fieldname_freestring2');
-                const $spa = $row.find('.pss_fieldname_spacefromref ');
+        const $rows = $('tr');
+        log("Rows found", $rows.length);
 
-                if ($edi.length && $pia.length) {
-                    results.push({
-                        // nur den code nehmen (alles vor dem bindestrich)
-                        edificio: $edi.text().trim().split(' - ')[0],
-                        piano: $pia.text().trim().split(' - ')[0],
-                        spazio: $spa.text().trim().split(' - ')[0]
-                    });
-                }
-            });
+        $rows.each(function (index) {
+            const $row = $(this);
+            const $edi = $row.find('.pss_fieldname_propertyfromref');
+            const $pia = $row.find('.pss_fieldname_freestring2');
+            const $spa = $row.find('.pss_fieldname_spacefromref');
 
-            if (results.length > 0) {
-                const jsonStr = JSON.stringify(results);
-                const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
-                
-                // relativer pfad damit es auf acc und prod ohne änderung läuft
-                const url = `/case/BP/MK_PUB_02a_cad?data=${base64Data}&lang=${detectedLang}`;
-                window.open(url, '_blank');
+            if ($edi.length && $pia.length) {
+                const data = {
+                    edificio: $edi.text().trim().split(' - ')[0],
+                    piano: $pia.text().trim().split(' - ')[0],
+                    spazio: $spa.text().trim().split(' - ')[0]
+                };
+                results.push(data);
+                log(`Data row ${index}`, data);
             }
         });
 
-        $langTarget.after($pubButton);
-    }
+        if (results.length > 0) {
+            info("Results extracted", results.length);
+            const jsonStr = JSON.stringify(results);
+            const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
+            const url = `/case/BP/MK_PUB_02a_cad?data=${base64Data}&lang=${detectedLang}`;
+            
+            log("Opening URL", url);
+            window.open(url, '_blank');
+        } else {
+            info("No data found to export");
+        }
+    });
+
+    $langTarget.after($pubButton);
+    info("Button injected");
+            }
 
 
 
@@ -490,9 +504,9 @@ $el.injectPublisherButton = function() {
          * @static
          * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/
          */
-        fmpooljs.updateCadViewer = function(orderNumber) {
+        fmpooljs.updateCadViewer = function (orderNumber) {
             log("updateCadViewer", orderNumber);
-            if(orderNumber == null) {
+            if (orderNumber == null) {
                 log("order number is null. request aborted");
                 return;
             }
