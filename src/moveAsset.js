@@ -1,62 +1,77 @@
-(function() {
+$(document).ready(function() {
+    // wird am anfang einmal geladen
+    console.log("planon-sender: init.");
+
     function injectPublisherButton() {
-        // test
+        // sprachelement als ankerpunkt nutzen damit der button oben im menü bleibt
+        const $langTarget = $('.language');
+        
+        // nur einfügen wenn der anker da ist und der button nicht schon existiert
+        if (!$langTarget.length || $('#planon-publisher-btn').length) return;
 
-        // Nur fortfahren, wenn ein Element mit der Klasse "language" existiert
-        if (!document.querySelector('.language')) return;
+        // sprache aus html tag holen für die button beschriftung
+        const htmlLang = $('html').attr('lang') || 'de';
+        let detectedLang = 'de';
+        let buttonText = 'Zum Lageplan';
 
-        const targetBtn = document.querySelector('a[aria-label="Avanti"]');
-        if (targetBtn && !document.getElementById('planon-publisher-btn')) {
-            // Standardtext (Fallback)
-            let buttonText = 'Visualizza richiesta su planimetria / Meldung auf dem Lageplan anzeigen';
+        if (htmlLang.includes('it')) { 
+            detectedLang = 'it'; 
+            buttonText = 'Alla planimetria'; 
+        } else if (htmlLang.includes('en')) { 
+            detectedLang = 'en'; 
+            buttonText = 'To the floor plan'; 
+        }
 
-            // Prüfen, ob ein <a class="language"> existiert, das einen <span> mit "Avanti" enthält
-            const langSpan = document.querySelector('a.language span');
-            if (langSpan && langSpan.textContent.includes('Avanti')) {
-                buttonText = 'Alla planimetria';
+        const $pubButton = $('<a>', {
+            id: 'planon-publisher-btn',
+            class: 'pss_action pss_button', // planon styles nutzen für saubere optik
+            href: 'javascript:void(0);',
+            css: { 
+                'background-color': '#00b2ee', 
+                'color': '#ffffff', 
+                'margin-left': '10px', 
+                'cursor': 'pointer' 
             }
-            // Sonst: Prüfen, ob der Ziel-Button (targetBtn) den Text "Weiter" enthält
-            else if (targetBtn.textContent.includes('Weiter')) {
-                buttonText = 'Zum Lageplan';
-            }
+        }).append($('<span>', { class: 'pss_action_label', text: buttonText }));
 
-            const pubButton = document.createElement('a');
-            pubButton.id = 'planon-publisher-btn'; 
-            pubButton.className = 'pss_action pss_button';
-            pubButton.innerHTML = `<span class="pss_action_label">${buttonText}</span>`;
-            pubButton.style.backgroundColor = '#00b2ee';
-            pubButton.style.color = '#ffffff';
-            pubButton.style.marginRight = '10px';
-            pubButton.href = "javascript:void(0);";
+        $pubButton.on('click', function(e) {
+            e.preventDefault();
+            let results = [];
+            
+            // alle zeilen durchgehen und daten ziehen
+            $('tr').each(function() {
+                const $row = $(this);
+                // technische planon selektoren verwenden (review punkt!)
+                const $edi = $row.find('.pss_fieldname_propertyfromref');
+                const $pia = $row.find('.pss_fieldname_freestring2');
+                const $spa = $row.find('.pss_fieldname_spacefromref ');
 
-            pubButton.onclick = function(e) {
-                e.preventDefault();
-                let results = [];
-                const allRows = document.querySelectorAll('tr.pss_mrw_rowvalid');
+                if ($edi.length && $pia.length) {
+                    results.push({
+                        // nur den code nehmen (alles vor dem bindestrich)
+                        edificio: $edi.text().trim().split(' - ')[0],
+                        piano: $pia.text().trim().split(' - ')[0],
+                        spazio: $spa.text().trim().split(' - ')[0]
+                    });
+                }
+            });
 
-                allRows.forEach(row => {
-                    const edificioCell = row.querySelector('.Edificio');
-                    const pianoCell = row.querySelector('.Piano');
-                    const spaceCell = row.querySelector('td[data-column-name*="Spazio"]');
-
-                    if (edificioCell && spaceCell) {
-                        results.push({
-                            edificio: edificioCell.innerText.trim().split(' - ')[0],
-                            piano: pianoCell ? pianoCell.innerText.trim().split(' - ')[0] : "",
-                            spaceId: spaceCell.innerText.trim()
-                        });
-                    }
-                });
-
-                if (results.length === 0) return alert("Keine gültigen Zeilen gefunden.");
-
+            if (results.length > 0) {
                 const jsonStr = JSON.stringify(results);
                 const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
-                const url = `https://sabes-acc.planoncloud.com/case/BP/MK_PUB_02a_cad?data=${base64Data}`;
+                
+                // relativer pfad damit es auf acc und prod ohne änderung läuft
+                const url = `/case/BP/MK_PUB_02a_cad?data=${base64Data}&lang=${detectedLang}`;
                 window.open(url, '_blank');
-            };
-            targetBtn.parentNode.insertBefore(pubButton, targetBtn);
-        }
+            }
+        });
+
+        $langTarget.after($pubButton);
     }
-    setInterval(injectPublisherButton, 10);
-})();
+
+    injectPublisherButton();
+
+    // observer statt intervall nutzen für bessere performance
+    const observer = new MutationObserver(() => injectPublisherButton());
+    observer.observe(document.body, { childList: true, subtree: true });
+});
