@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // wird am anfang einmal geladen
     console.log("planon-sender: init.");
-// fmpooljs('.pss_actiontype_continue').injectPublisherButton();
+    // fmpooljs('.pss_actiontype_continue').injectPublisherButton();
     function injectPublisherButton() {
         // sprachelement als ankerpunkt nutzen damit der button oben im menü bleibt
         const $langTarget = $('.pss_actiontype_continue');
-        
+
         // nur einfügen wenn der anker da ist und der button nicht schon existiert
         if (!$langTarget.length || $('#planon-publisher-btn').length) return;
 
@@ -14,32 +14,32 @@ $(document).ready(function() {
         let detectedLang = 'de';
         let buttonText = 'Zum Lageplan';
 
-        if (htmlLang.includes('it')) { 
-            detectedLang = 'it'; 
-            buttonText = 'Alla planimetria'; 
-        } else if (htmlLang.includes('en')) { 
-            detectedLang = 'en'; 
-            buttonText = 'To the floor plan'; 
+        if (htmlLang.includes('it')) {
+            detectedLang = 'it';
+            buttonText = 'Alla planimetria';
+        } else if (htmlLang.includes('en')) {
+            detectedLang = 'en';
+            buttonText = 'To the floor plan';
         }
 
         const $pubButton = $('<a>', {
             id: 'planon-publisher-btn',
             class: 'pss_action pss_button', // planon styles nutzen für saubere optik
             href: 'javascript:void(0);',
-            css: { 
-                'background-color': '#00b2ee', 
-                'color': '#ffffff', 
-                'margin-left': '10px', 
-                'cursor': 'pointer' 
+            css: {
+                'background-color': '#00b2ee',
+                'color': '#ffffff',
+                'margin-left': '10px',
+                'cursor': 'pointer'
             }
         }).append($('<span>', { class: 'pss_action_label', text: buttonText }));
 
-        $pubButton.on('click', function(e) {
+        $pubButton.on('click', function (e) {
             e.preventDefault();
             let results = [];
-            
+
             // alle zeilen durchgehen und daten ziehen
-            $('tr').each(function() {
+            $('tr').each(function () {
                 const $row = $(this);
                 // technische planon selektoren verwenden (review punkt!)
                 const $edi = $row.find('.pss_fieldname_propertyfromref');
@@ -59,7 +59,7 @@ $(document).ready(function() {
             if (results.length > 0) {
                 const jsonStr = JSON.stringify(results);
                 const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
-                
+
                 // relativer pfad damit es auf acc und prod ohne änderung läuft
                 const url = `/case/BP/MK_PUB_02a_cad?data=${base64Data}&lang=${detectedLang}`;
                 window.open(url, '_blank');

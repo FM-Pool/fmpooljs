@@ -1,7 +1,7 @@
-(function() {
+(function () {
     const urlParams = new URLSearchParams(window.location.search);
     const encodedData = urlParams.get('data');
-    const currentLang = urlParams.get('lang') || 'de'; 
+    const currentLang = urlParams.get('lang') || 'de';
     if (!encodedData) return;
 
     let item;
@@ -17,7 +17,7 @@
     };
 
     const overlayId = 'autofill-overlay';
-    
+
     const fieldClasses = {
         edificio: 'pss_fieldname_propertyref',
         piano: 'pss_fieldname_pubcadviewerfloor',
@@ -66,7 +66,7 @@
             if (!container) return resolve(false);
 
             const openBtn = container.querySelector('a.pss_action, button.pss_action, .pnicon-chevron-right-light, .pnicon-chevron-right');
-            
+
             if (!openBtn) return resolve(false);
 
             setTimeout(() => {
@@ -82,7 +82,7 @@
                             clearInterval(checkModal);
                             const selectBtn = match.querySelector('.pnicon-chevron-right, .pnicon-chevron-right-light, a.pss_action');
                             if (selectBtn) selectBtn.click(); else match.click();
-                            
+
                             setTimeout(() => {
                                 if (shouldHide) hideContainer(`.${targetClass}`);
                                 resolve(true);
@@ -104,7 +104,7 @@
             await handlePopup(fieldClasses.piano, item.piano, false);
             await new Promise(r => setTimeout(r, 600));
 
-            
+
             const darstellungContainer = document.querySelector(`.${fieldClasses.darstellung}`);
             if (darstellungContainer) {
                 const select = darstellungContainer.querySelector('select');
