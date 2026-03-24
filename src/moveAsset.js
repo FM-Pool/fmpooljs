@@ -1,5 +1,7 @@
 (function() {
     function injectPublisherButton() {
+        // test
+
         // Nur fortfahren, wenn ein Element mit der Klasse "language" existiert
         if (!document.querySelector('.language')) return;
 
