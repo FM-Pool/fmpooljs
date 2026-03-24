@@ -1,10 +1,10 @@
 $(document).ready(function() {
     // wird am anfang einmal geladen
     console.log("planon-sender: init.");
-
+// fmpooljs('.pss_actiontype_continue').injectPublisherButton();
     function injectPublisherButton() {
         // sprachelement als ankerpunkt nutzen damit der button oben im menü bleibt
-        const $langTarget = $('.language');
+        const $langTarget = $('.pss_actiontype_continue');
         
         // nur einfügen wenn der anker da ist und der button nicht schon existiert
         if (!$langTarget.length || $('#planon-publisher-btn').length) return;
