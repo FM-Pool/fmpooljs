@@ -332,7 +332,10 @@
             /**
              * @function injectPublisherButton
              * @access public
-             * @summary adds a button which links to a cad viewer. Transfers information like building, floor and space to the cad pub. 
+             * @summary adds a button which links to a cad viewer. Transfers information like building, floor and space to the cad pub.
+             * @example 
+             * // Useage for example in a "Move Request wizard" -> "Move asset" -> "JavaScript"
+             * fmpooljs(this).injectPublisherButton(fmpooljs.getSessionItem("property"));
              * @param {String} building 
              * @returns 
              */
@@ -383,37 +386,26 @@
                     const $rows = $el.find('tr');
                     log("Rows found", $rows.length);
 
-                    $rows.each(function (index) {
-                        const $row = $(this);
-                        const $floor = $row.find('.pss_fieldname_freestring2');
-                        const $space = $row.find('.pss_fieldname_spacefromref');
-
-                        if (building) {
-                            var floorText = '';
-                            if ($floor.length) {
-                                data.floorText = $floor.text().trim().split(' - ')[0];
-                            }
-                            const data = {
-                                building: building.text().trim().split(' - ')[0],
-                                floor: floorText,
-                                space: $space.text().trim().split(' - ')[0]
-                            };
-
-                            results.push(data);
-                            console.log(`Data row ${index}`, data);
-                        }
-                    });
-
                     if (building) {
-                        info("Results extracted", results.length);
-                        const jsonStr = JSON.stringify(results);
+                        const data = {
+                            building: building.split(',')[1].trim(),
+                            floor: '',
+                        };
+                        rows = $el.find('tr.pss_mrw_rowvalid');
+                        if(rows.length) {
+                            const floor = rows.find('.pss_fieldname_freestring2');
+                            if(floor.length) {
+                                data.floor = floor.text().trim().split(' - ')[0];
+                            }
+                        }
+
+                        info("Results extracted", data);
+                        const jsonStr = JSON.stringify(data);
                         const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
                         const url = `/case/BP/MK_PUB_02a_cad?data=${base64Data}&lang=${detectedLang}`;
 
                         log("Opening URL", url);
                         window.open(url, '_blank');
-                    } else {
-                        info("No data found to export");
                     }
                 });
 
