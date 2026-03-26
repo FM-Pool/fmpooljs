@@ -329,9 +329,16 @@
                 }
             }
 
-            $el.injectPublisherButton = function () {
+            /**
+             * @function injectPublisherButton
+             * @access public
+             * @summary adds a button which links to a cad viewer. Transfers information like building, floor and space to the cad pub. 
+             * @param {String} building 
+             * @returns 
+             */
+            $el.injectPublisherButton = function (building) {
                 info("injectPublisherButton start");
-                const $langTarget = $('.pss_actiontype_continue');
+                const $langTarget = $el.find('.pss_actiontype_continue');
 
                 if (!$langTarget.length) {
                     log("Abort: .pss_actiontype_continue not found");
@@ -373,27 +380,31 @@
                     e.preventDefault();
                     let results = [];
 
-                    const $rows = $('tr');
+                    const $rows = $el.find('tr');
                     log("Rows found", $rows.length);
 
                     $rows.each(function (index) {
                         const $row = $(this);
-                        const $edi = $row.find('.pss_fieldname_propertyfromref');
-                        const $pia = $row.find('.pss_fieldname_freestring2');
-                        const $spa = $row.find('.pss_fieldname_spacefromref');
+                        const $floor = $row.find('.pss_fieldname_freestring2');
+                        const $space = $row.find('.pss_fieldname_spacefromref');
 
-                        if ($edi.length && $pia.length) {
+                        if (building) {
+                            var floorText = '';
+                            if ($floor.length) {
+                                data.floorText = $floor.text().trim().split(' - ')[0];
+                            }
                             const data = {
-                                edificio: $edi.text().trim().split(' - ')[0],
-                                piano: $pia.text().trim().split(' - ')[0],
-                                spazio: $spa.text().trim().split(' - ')[0]
+                                building: building.text().trim().split(' - ')[0],
+                                floor: floorText,
+                                space: $space.text().trim().split(' - ')[0]
                             };
+
                             results.push(data);
-                            log(`Data row ${index}`, data);
+                            console.log(`Data row ${index}`, data);
                         }
                     });
 
-                    if (results.length > 0) {
+                    if (building) {
                         info("Results extracted", results.length);
                         const jsonStr = JSON.stringify(results);
                         const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
@@ -409,11 +420,6 @@
                 $langTarget.after($pubButton);
                 info("Button injected");
             }
-
-
-
-
-
 
             return $el;
 
