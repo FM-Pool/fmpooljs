@@ -2,13 +2,21 @@
     const urlParams = new URLSearchParams(window.location.search);
     const encodedData = urlParams.get('data');
     const currentLang = urlParams.get('lang') || 'de';
-    if (!encodedData) return;
+    const loggingEnabled = true;
+    if (!encodedData) {
+        log(["abort because no data provided."])
+        return;
+    }
 
     let item;
     try {
         const decodedStr = decodeURIComponent(escape(atob(encodedData)));
         item = JSON.parse(decodedStr);
-    } catch (e) { return; }
+        log(["decode data", item])
+    } catch (e) {
+        log(["Could process data", encodedData, decodedStr]);
+        return;
+    }
 
     const translations = {
         de: "Automatisches Ausfüllen läuft...",
@@ -45,7 +53,10 @@
     };
 
     function showOverlay() {
-        if (document.getElementById(overlayId)) return;
+        if (document.getElementById(overlayId)) {
+            log(["Overlay shown", overlayId]);
+            return;
+        }
         const msg = translations[currentLang] || translations.de;
         const overlay = document.createElement('div');
         overlay.id = overlayId;
@@ -63,11 +74,15 @@
     const handlePopup = (targetClass, searchValue, shouldHide) => {
         return new Promise((resolve) => {
             const container = document.querySelector(`.${targetClass}`);
-            if (!container) return resolve(false);
+            if (!container) {
+                return resolve(false);
+            }
 
             const openBtn = container.querySelector('a.pss_action, button.pss_action, .pnicon-chevron-right-light, .pnicon-chevron-right');
 
-            if (!openBtn) return resolve(false);
+            if (!openBtn) {
+                return resolve(false);
+            }
 
             setTimeout(() => {
                 openBtn.click();
@@ -75,12 +90,12 @@
                     const modal = document.querySelector('.modal-dialog, .pss_modal');
                     if (modal && modal.offsetParent !== null) {
                         modal.style.setProperty('opacity', '0.01', 'important');
-                        const rows = Array.from(modal.querySelectorAll('tr.aria_row, tr.row_title, tr.pss_row'));
+                        const rows = Array.from(modal.querySelectorAll('tbody tr.aria_row'));
                         if (searchValue) {
                             const match = rows.find(r => r.innerText.includes(searchValue));
                             clickValueInSearch(match, checkModal, shouldHide, targetClass, resolve);
                         } else {
-                            clickValueInSearch(rows[0],checkModal, shouldHide, targetClass, resolve);
+                            clickValueInSearch(rows[0], checkModal, shouldHide, targetClass, resolve);
                         }
                     }
                 }, 300);
@@ -89,14 +104,21 @@
         });
     };
 
-    function clickValueInSearch(element,checkModal, shouldHide, targetClass, resolve) {
+    function clickValueInSearch(element, checkModal, shouldHide, targetClass, resolve) {
+        log(clickValueInSearch, element, checkModal, shouldHide, targetClass, resolve);
         if (element) {
             clearInterval(checkModal);
             const selectBtn = element.querySelector('.pnicon-chevron-right, .pnicon-chevron-right-light, a.pss_action');
-            if (selectBtn) selectBtn.click(); else element.click();
+            if (selectBtn) {
+                selectBtn.click();
+            } else {
+                element.click();
+            }
 
             setTimeout(() => {
-                if (shouldHide) hideContainer(`.${targetClass}`);
+                if (shouldHide) {
+                    hideContainer(`.${targetClass}`);
+                }
                 resolve(true);
             }, 300);
         }
@@ -142,6 +164,11 @@
         }
     };
 
+    function log(...args) {
+        if (loggingEnabled) {
+            console.log(args);
+        }
+    }
 
     const startRetry = setInterval(() => {
         const check = document.querySelector(`.${fieldClasses.building}`);
