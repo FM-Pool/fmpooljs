@@ -393,7 +393,7 @@
                         };
                         rows = $el.find('tr.pss_mrw_rowvalid');
                         if(rows.length) {
-                            const floor = rows.find('.pss_fieldname_freestring2');
+                            const floor = rows[0].find('.pss_fieldname_freestring2');
                             if(floor.length) {
                                 data.floor = floor.text().trim().split(' - ')[0];
                             }
