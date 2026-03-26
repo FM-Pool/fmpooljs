@@ -384,14 +384,14 @@
                     let results = [];
 
                     const $rows = $el.find('tr');
-                    log("Rows found", $rows.length);
+                    log("Rows found", $rows);
 
                     if (building) {
                         const data = {
                             building: building.split(',')[1].trim(),
                             floor: '',
                         };
-                        rows = $el.find('tr.pss_mrw_rowvalid');
+                        rows = $el.find('tobdy tr');
                         if(rows.length) {
                             const floor = rows[0].find('.pss_fieldname_freestring2');
                             if(floor.length) {
