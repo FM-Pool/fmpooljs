@@ -91,6 +91,7 @@
                     if (modal && modal.offsetParent !== null) {
                         modal.style.setProperty('opacity', '0.01', 'important');
                         const rows = Array.from(modal.querySelectorAll('tbody tr.aria_row'));
+                        log("rows from search", rows, searchValue);
                         if (searchValue) {
                             const match = rows.find(r => r.innerText.includes(searchValue));
                             clickValueInSearch(match, checkModal, shouldHide, targetClass, resolve);
