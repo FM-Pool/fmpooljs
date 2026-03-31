@@ -390,7 +390,7 @@
                         log("Rows found", rows);
                         if(rows.length > 0) {
                             for(var i = 0; i < rows.length; i++) {
-                                var floorElement = rows[i].find('.pss_fieldname_freestring2');
+                                var floorElement = $(rows).find('.pss_fieldname_freestring2');
                                 if(floorElement.length > 0) {
                                     data.floor = floorElement.text().trim().split(' - ')[0];
                                 }
