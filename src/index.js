@@ -14,7 +14,7 @@
     }
 
     //
-    const version = "0.1.15";
+    const version = "0.1.16";
     const script = document.currentScript;
     const config = script?.dataset;
 
@@ -175,6 +175,7 @@
             };
 
 
+
             /**
              * @function readonlyOnSessionCondition
              * @access public
@@ -277,6 +278,26 @@
             }
 
             /**
+             * @function extractOrderNumberFromText
+             * @access public
+             * @summary extracst the first occurrence of a order number from the text within the element.
+             * @returns orderNumber
+             */
+            $el.extractOrderNumberFromText = function () {
+                log("Extract order number from text", $el);
+                if ($el) {
+                    var elementText = $el.text();
+                    const regEx = /\d+(\.)\d+/g;
+                    var res = regEx.exec(elementText);
+                    log("Regex operation", elementText, res);
+                    if (res != null) {
+                        return res[0];
+                    }
+                }
+                return null;
+            }
+
+            /**
              * @function setStandardStatusColor
              * @access public
              * @summary set colors for datasets according to color definition
@@ -314,7 +335,292 @@
                 }
             }
 
+            /**
+             * @function addFastPaggingButtonToTable
+             * @access public
+             * @summary adds a pagging button to a table which goes 10 pages further or back.
+             * @example 
+             * // add in JS tab of List block
+             * fmpooljs(this).addFastPaggingButtonToTable();
+             * @returns fmpooljs object
+             */
+            $el.addFastPaggingButtonToTable = function () {
+                var navwrapper = $el.find('.pss_navigation');
+
+                if ($("div.fmpooljs_spinner").length == 0) {
+                    $(".pss_content").append('<div class="fmpooljs_spinner busy-outline"><div class="busy"></div></div>');
+
+                }
+                if ($("div.fmpooljs_inline_spinner").length == 0) {
+                    $(".pss_nav_count").before('<div class="fmpooljs_spinner fmpooljs_inline_spinner"><div class="pss_page_header busy"></div></div>');
+                }
+                log("addFastPaggingButtonToTable", navwrapper, $el, fmpooljs.getSessionItem("fmpooljs_table_paging_action"));
+                $el.prepend('<style>.fmpooljs_minus_ten::before { content: "\\f01f9" !important; font-family: "Planon-icons"; }</style>');
+                $el.prepend('<style>.fmpooljs_plus_ten::before { content: "\\f01fc" !important; font-family: "Planon-icons"; }</style>');
+                $el.prepend('<style>.fmpooljs_first_page::before { content: "\\f023b" !important; font-family: "Planon-icons"; }</style>');
+                $el.prepend('<style>.fmpooljs_last_page::before { content: "\\f023a" !important; font-family: "Planon-icons"; }</style>');
+                $el.prepend('<style>body div.fmpooljs_inline_spinner { position: relative; left: 0; top: 0; }</style>');
+                $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header { padding: 0 !important; }</style>');
+                $el.prepend('<style>body div.fmpooljs_inline_spinner .pss_page_header.busy::before { position: relative !important; }</style>');
+                $el.prepend('<style>body.fmpooljs_table_paging_action .pss_table, body.fmpooljs_table_paging_action .pss_nav_count { display: none !important; }</style>');
+
+                navwrapper.prepend(`<button class="fmpooljs_minus_ten pss_action pss_nav_prev" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.PREVIOUS)}">
+                                    <span class="pss_action_label"></span></button>`);
+                navwrapper.prepend(`<button class="fmpooljs_first_page pss_action pss_nav_prev" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.START)}">
+                                    <span class="pss_action_label"></span></button>`);
+                navwrapper.append(`<button class="fmpooljs_plus_ten pss_action pss_nav_next" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.NEXT)}">
+                                    <span class="pss_action_label"></span></button>`);
+                navwrapper.append(`<button class="fmpooljs_last_page pss_action pss_nav_next" type="button" role="button" title="${getTablePaggingTooltip(TablePaggingButtonTypes.END)}">
+                                    <span class="pss_action_label"></span></button>`);
+
+                var hasNext = true;
+                var hasPrev = true;
+                // set the correct disable status
+                log("check prev button is active", $el.find('.pss_actiontype_prevpage'), $el.find('.pss_actiontype_prevpage').hasClass('pss_disabled'));
+                if ($el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
+                    hasPrev = false;
+                    $el.find('.fmpooljs_minus_ten').addClass('pss_disabled');
+                    $el.find('.fmpooljs_first_page').addClass('pss_disabled');
+                } else {
+                    $el.find('.fmpooljs_minus_ten').removeClass('pss_disabled');
+                    $el.find('.fmpooljs_first_page').removeClass('pss_disabled');
+                }
+                log("check next button is active", $el.find('.pss_actionname_nextpage'), $el.find('.pss_actionname_nextpage').hasClass('pss_disabled'));
+                if ($el.find('.pss_actionname_nextpage').hasClass('pss_disabled')) {
+                    hasNext = false;
+                    $el.find('.fmpooljs_plus_ten').addClass('pss_disabled');
+                    $el.find('.fmpooljs_last_page').addClass('pss_disabled');
+                } else {
+                    $el.find('.fmpooljs_plus_ten').removeClass('pss_disabled');
+                    $el.find('.fmpooljs_last_page').removeClass('pss_disabled');
+                }
+
+                var selectorForButton = fmpooljs.getSessionItem("fmpooljs_table_paging_button_selector_to_click");
+                var couldBeClicked = true;
+                if (fmpooljs.getSessionItem("fmpooljs_table_paging_action") == 1) {
+                    $("div.fmpooljs_spinner").show();
+                    $('body').addClass("fmpooljs_table_paging_action");
+                    var pageStep = fmpooljs.getSessionItem("fmpooljs_table_paging_action_page");
+                    pageStep++;
+                    if (pageStep < 10) {
+                        fmpooljs.setSessionItem("fmpooljs_table_paging_action_page", pageStep);
+                        couldBeClicked = clickNextTableButton(selectorForButton, hasNext, hasPrev);
+                        if (!couldBeClicked) {
+                            fmpooljs.setSessionItem("fmpooljs_table_paging_action_page", 10);
+                            stopPagging();
+                        }
+                    } else {
+                        stopPagging();
+                    }
+                } else if (fmpooljs.getSessionItem("fmpooljs_table_paging_action") == 2) {
+                    $("div.fmpooljs_spinner").show();
+                    $('body').addClass("fmpooljs_table_paging_action");
+                    couldBeClicked = clickNextTableButton(selectorForButton, hasNext, hasPrev);
+                    if (!couldBeClicked) {
+                        stopPagging();
+                    }
+                } else {
+                    stopPagging();
+                }
+
+                /*
+                for(i = 983539;i < 983539 +200; i++ ) {
+                    var hex = i.toString(16);
+                    $el.prepend('<style>.test_' + i + '::before { content: "\\' + hex + '" !important; font-family: "Planon-icons"; }</style>');
+                    $(".pss_block_list_table").append('<div class="test_' + i + '">' + hex +'</div>');
+                }
+                */
+
+                addClickActionPaggingForTable($el, ".fmpooljs_plus_ten", ".pss_actionname_nextpage", 1);
+                addClickActionPaggingForTable($el, ".fmpooljs_minus_ten", ".pss_actiontype_prevpage", 1);
+                addClickActionPaggingForTable($el, ".fmpooljs_last_page", ".pss_actionname_nextpage", 2);
+                addClickActionPaggingForTable($el, ".fmpooljs_first_page", ".pss_actiontype_prevpage", 2);
+                return $el;
+            }
+
+            const TablePaggingButtonTypes = Object.freeze({
+                NEXT: 'NEXT',
+                PREVIOUS: 'PREVIOUS',
+                START: 'START',
+                END: 'END'
+            });
+
+            const Languages = Object.freeze({
+                EN: 'EN',
+                IT: 'IT',
+                DE: 'DE',
+                FALLBACK: 'EN'
+            });
+
+            const TablePaggingButtonTooltips = Object.freeze({
+                [Languages.DE]: {
+                    [TablePaggingButtonTypes.NEXT]: "10 Seiten weiter",
+                    [TablePaggingButtonTypes.PREVIOUS]: "10 Seiten zurück",
+                    [TablePaggingButtonTypes.START]: "Zur ersten Seite",
+                    [TablePaggingButtonTypes.END]: "Zur letzten Seite",
+                },
+                [Languages.EN]: {
+                    [TablePaggingButtonTypes.NEXT]: "10 pages forward",
+                    [TablePaggingButtonTypes.PREVIOUS]: "10 pages backward",
+                    [TablePaggingButtonTypes.START]: "Go to first page",
+                    [TablePaggingButtonTypes.END]: "Go to last page",
+                },
+                [Languages.IT]: {
+                    [TablePaggingButtonTypes.NEXT]: "10 pagine avanti",
+                    [TablePaggingButtonTypes.PREVIOUS]: "10 pagine indietro",
+                    [TablePaggingButtonTypes.START]: "Alla prima pagina",
+                    [TablePaggingButtonTypes.END]: "All'ultima pagina",
+                }
+            });
+
+            function getTablePaggingTooltip(buttonType) {
+                var lang = getLang();
+                return TablePaggingButtonTooltips[lang][buttonType];
+            }
+
+            function getLang(lang) {
+                var metaLang = $("html").attr("lang");
+                var lang = Languages.FALLBACK;
+                if (metaLang) {
+                    for (const [value] of Object.entries(Languages)) {
+                        if (value == metaLang.toUpperCase()) {
+                            lang = value;
+                        }
+                    }
+                }
+                return lang;
+            }
+
+            function stopPagging() {
+                log("stop pagging");
+                fmpooljs.setSessionItem("fmpooljs_table_paging_action", 0);
+                $("div.fmpooljs_spinner").hide();
+                $('body').removeClass("fmpooljs_table_paging_action");
+            }
+
+            function clickNextTableButton(selector, hasNext, hasPrev) {
+                log(["clickNextTableButton", selector, hasNext, hasPrev]);
+                var couldBeClicked = false;
+                if ((selector == ".pss_actionname_nextpage" && hasNext)
+                    || (selector == ".pss_actiontype_prevpage" && hasPrev)) {
+                    couldBeClicked = true;
+                    waitForClickHandler(selector, () => {
+                        $el.find(selector).click();
+                    });
+                }
+                return couldBeClicked;
+            }
+
+            function waitForClickHandler(selector, callback) {
+                log(["waitForClickHandler", selector, callback]);
+                const interval = setInterval(() => {
+                    const el = $(selector)[0];
+                    if (!el) return;
+
+                    const events = $._data(el, 'events');
+
+                    if (events && events.click && events.click.length > 0) {
+                        clearInterval(interval);
+                        callback();
+                    }
+                }, 50);
+            }
+
+            function addClickActionPaggingForTable(currentElement, selectorForButtonClick, selectorButtonForAutomatedClick, mode) {
+                log("addClickActionPaggingForTable", currentElement, selectorForButtonClick, selectorButtonForAutomatedClick);
+                currentElement.find(selectorForButtonClick).on("click", function () {
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_action", mode);
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_button_selector_to_click", selectorButtonForAutomatedClick);
+                    fmpooljs.setSessionItem("fmpooljs_table_paging_action_page", 0);
+                    $el.find(selectorButtonForAutomatedClick).click();
+                });
+
+            }
+
+            /**
+             * @function injectPublisherButton
+             * @access public
+             * @summary adds a button which links to a cad viewer. Transfers information like building, floor and space to the cad pub.
+             * @example 
+             * // Useage for example in a "Move Request wizard" -> "Move asset" -> "JavaScript"
+             * fmpooljs(this).injectPublisherButton(fmpooljs.getSessionItem("property"));
+             * @param {String} building 
+             * @returns 
+             */
+            $el.injectPublisherButton = function (building) {
+                info("injectPublisherButton start");
+                const $langTarget = $el.find('.pss_actiontype_continue');
+
+                if (!$langTarget.length) {
+                    log("Abort: .pss_actiontype_continue not found");
+                    return;
+                }
+                if ($('#planon-publisher-btn').length) {
+                    log("Abort: Button already exists");
+                    return;
+                }
+
+                const htmlLang = $('html').attr('lang') || 'de';
+                let detectedLang = 'de';
+                let buttonText = 'Zum Lageplan';
+
+                if (htmlLang.includes('it')) {
+                    detectedLang = 'it';
+                    buttonText = 'Alla planimetria';
+                } else if (htmlLang.includes('en')) {
+                    detectedLang = 'en';
+                    buttonText = 'To the floor plan';
+                }
+
+                info("Language detected", { htmlLang, detectedLang });
+
+                const $pubButton = $('<a>', {
+                    id: 'planon-publisher-btn',
+                    class: 'pss_action pss_button',
+                    href: 'javascript:void(0);',
+                    css: {
+                        'background-color': '#00b2ee',
+                        'color': '#ffffff',
+                        'margin-left': '10px',
+                        'cursor': 'pointer'
+                    }
+                }).append($('<span>', { class: 'pss_action_label', text: buttonText }));
+
+                $pubButton.on('click', function (e) {
+                    info("Publisher button clicked");
+                    e.preventDefault();
+                    if (building) {
+                        const data = {
+                            building: building.split(',')[1].trim(),
+                            floor: '',
+                        };
+                        rows = $el.find('tbody tr');
+                        log("Rows found", rows);
+                        if(rows.length > 0) {
+                            for(var i = 0; i < rows.length; i++) {
+                                var floorElement = $(rows[i]).find('.pss_fieldname_freestring2');
+                                if(floorElement.length > 0) {
+                                    data.floor = floorElement.text().trim().split(' - ')[0];
+                                }
+                            }
+                        }
+
+                        info("Results extracted", data);
+                        const jsonStr = JSON.stringify(data);
+                        const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
+                        const url = `/case/BP/MK_PUB_02a_cad?data=${base64Data}&lang=${detectedLang}`;
+
+                        log("Opening URL", url);
+                        window.open(url, '_blank');
+                    }
+                });
+
+                $langTarget.after($pubButton);
+                info("Button injected");
+            }
+
             return $el;
+
         }
 
         // --- Static helpers ---
@@ -454,12 +760,36 @@
          * @function disableLogging
          * @access public
          * @static
-         * @summary deactivats logging
+         * @summary deactivate logging
          */
         fmpooljs.disableLogging = function () {
             loggingEnabled = false;
             log("Logging disabled");
         };
+
+        /**
+         * @function updateCadViewer
+         * @access public
+         * @static
+         * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/
+         */
+        fmpooljs.updateCadViewer = function (orderNumber) {
+            log("updateCadViewer", orderNumber);
+            if (orderNumber == null) {
+                log("order number is null. request aborted");
+                return;
+            }
+            $.ajax({
+                url: '/services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/' + orderNumber,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: '{}',
+                success: function (data) {
+                    log('Updated CAD data.', data);
+                }
+            });
+
+        }
 
         /**
          * @function waitForElementToExist
