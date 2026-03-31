@@ -10,7 +10,7 @@
     "docs": "jsdoc2md src/**/*.js > docs/README.md"
   },
   "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-terser": "^1.0.0",
     "jsdoc": "^4.0.5",
     "jsdoc-to-markdown": "^9.1.3",
     "minami": "^1.2.3",
