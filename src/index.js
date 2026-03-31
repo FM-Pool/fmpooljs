@@ -273,6 +273,26 @@
             }
 
             /**
+             * @function extractOrderNumberFromText
+             * @access public
+             * @summary extracst the first occurrence of a order number from the text within the element.
+             * @returns orderNumber
+             */
+            $el.extractOrderNumberFromText = function () {
+                log("Extract order number from text", $el);
+                if ($el) {
+                    var elementText = $el.text();
+                    const regEx = /\d+(\.)\d+/g;
+                    var res = regEx.exec(elementText);
+                    log("Regex operation", elementText, res);
+                    if (res != null) {
+                        return res[0];
+                    }
+                }
+                return null;
+            }
+
+            /**
              * @function setStandardStatusColor
              * @access public
              * @summary set colors for datasets according to color definition
@@ -512,7 +532,90 @@
 
             }
 
+            /**
+             * @function injectPublisherButton
+             * @access public
+             * @summary adds a button which links to a cad viewer. Transfers information like building, floor and space to the cad pub.
+             * @example 
+             * // Useage for example in a "Move Request wizard" -> "Move asset" -> "JavaScript"
+             * fmpooljs(this).injectPublisherButton(fmpooljs.getSessionItem("property"));
+             * @param {String} building 
+             * @returns 
+             */
+            $el.injectPublisherButton = function (building) {
+                info("injectPublisherButton start");
+                const $langTarget = $el.find('.pss_actiontype_continue');
+
+                if (!$langTarget.length) {
+                    log("Abort: .pss_actiontype_continue not found");
+                    return;
+                }
+                if ($('#planon-publisher-btn').length) {
+                    log("Abort: Button already exists");
+                    return;
+                }
+
+                const htmlLang = $('html').attr('lang') || 'de';
+                let detectedLang = 'de';
+                let buttonText = 'Zum Lageplan';
+
+                if (htmlLang.includes('it')) {
+                    detectedLang = 'it';
+                    buttonText = 'Alla planimetria';
+                } else if (htmlLang.includes('en')) {
+                    detectedLang = 'en';
+                    buttonText = 'To the floor plan';
+                }
+
+                info("Language detected", { htmlLang, detectedLang });
+
+                const $pubButton = $('<a>', {
+                    id: 'planon-publisher-btn',
+                    class: 'pss_action pss_button',
+                    href: 'javascript:void(0);',
+                    css: {
+                        'background-color': '#00b2ee',
+                        'color': '#ffffff',
+                        'margin-left': '10px',
+                        'cursor': 'pointer'
+                    }
+                }).append($('<span>', { class: 'pss_action_label', text: buttonText }));
+
+                $pubButton.on('click', function (e) {
+                    info("Publisher button clicked");
+                    e.preventDefault();
+                    if (building) {
+                        const data = {
+                            building: building.split(',')[1].trim(),
+                            floor: '',
+                        };
+                        rows = $el.find('tbody tr');
+                        log("Rows found", rows);
+                        if(rows.length > 0) {
+                            for(var i = 0; i < rows.length; i++) {
+                                var floorElement = $(rows[i]).find('.pss_fieldname_freestring2');
+                                if(floorElement.length > 0) {
+                                    data.floor = floorElement.text().trim().split(' - ')[0];
+                                }
+                            }
+                        }
+
+                        info("Results extracted", data);
+                        const jsonStr = JSON.stringify(data);
+                        const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
+                        const url = `/case/BP/MK_PUB_02a_cad?data=${base64Data}&lang=${detectedLang}`;
+
+                        log("Opening URL", url);
+                        window.open(url, '_blank');
+                    }
+                });
+
+                $langTarget.after($pubButton);
+                info("Button injected");
+            }
+
             return $el;
+
         }
 
         // --- Static helpers ---
@@ -587,12 +690,36 @@
          * @function disableLogging
          * @access public
          * @static
-         * @summary deactivats logging
+         * @summary deactivate logging
          */
         fmpooljs.disableLogging = function () {
             loggingEnabled = false;
             log("Logging disabled");
         };
+
+        /**
+         * @function updateCadViewer
+         * @access public
+         * @static
+         * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/
+         */
+        fmpooljs.updateCadViewer = function (orderNumber) {
+            log("updateCadViewer", orderNumber);
+            if (orderNumber == null) {
+                log("order number is null. request aborted");
+                return;
+            }
+            $.ajax({
+                url: '/services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/' + orderNumber,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: '{}',
+                success: function (data) {
+                    log('Updated CAD data.', data);
+                }
+            });
+
+        }
 
         /**
          * @function waitForElementToExist
