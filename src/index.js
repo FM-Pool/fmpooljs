@@ -14,7 +14,7 @@
     }
 
     //
-    const version = "0.1.16";
+    const version = "0.1.17";
     const script = document.currentScript;
     const config = script?.dataset;
 
@@ -594,7 +594,7 @@
                             building: building.split(',')[1].trim(),
                             floor: '',
                         };
-                        rows = $el.find('tbody tr');
+                        var rows = $el.find('tbody tr');
                         log("Rows found", rows);
                         if(rows.length > 0) {
                             for(var i = 0; i < rows.length; i++) {
