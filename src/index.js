@@ -381,21 +381,19 @@
                 $pubButton.on('click', function (e) {
                     info("Publisher button clicked");
                     e.preventDefault();
-                    let results = [];
-
-                    const $rows = $el.find('tr');
-                    log("Rows found", $rows);
-
                     if (building) {
                         const data = {
                             building: building.split(',')[1].trim(),
                             floor: '',
                         };
-                        rows = $el.find('tobdy tr');
-                        if(rows.length) {
-                            const floor = rows[0].find('.pss_fieldname_freestring2');
-                            if(floor.length) {
-                                data.floor = floor.text().trim().split(' - ')[0];
+                        rows = $el.find('tbody tr');
+                        log("Rows found", rows);
+                        if(rows.length > 0) {
+                            for(var i = 0; i < rows.length; i++) {
+                                var floorElement = rows[i].find('.pss_fieldname_freestring2');
+                                if(floorElement.length > 0) {
+                                    data.floor = floorElement.text().trim().split(' - ')[0];
+                                }
                             }
                         }
 
