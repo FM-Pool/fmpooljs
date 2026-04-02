@@ -14,7 +14,7 @@
     }
 
     //
-    const version = "0.1.17";
+    const version = "0.1.18";
     const script = document.currentScript;
     const config = script?.dataset;
 
@@ -548,6 +548,7 @@
              * @returns 
              */
             $el.injectPublisherButton = function (building) {
+                return;
                 info("injectPublisherButton start");
                 const $langTarget = $el.find('.pss_actiontype_continue');
 
@@ -774,6 +775,7 @@
          * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/
          */
         fmpooljs.updateCadViewer = function (orderNumber) {
+            return;
             log("updateCadViewer", orderNumber);
             if (orderNumber == null) {
                 log("order number is null. request aborted");
