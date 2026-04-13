@@ -14,7 +14,7 @@
     }
 
     //
-    const version = "0.1.18";
+    const version = "0.1.19";
     const script = document.currentScript;
     const config = script?.dataset;
 
@@ -548,11 +548,10 @@
              * @returns 
              */
             $el.injectPublisherButton = function (building) {
-                return;
                 info("injectPublisherButton start");
-                const $langTarget = $el.find('.pss_actiontype_continue');
+                const $continueButton = $el.find('.pss_actiontype_continue');
 
-                if (!$langTarget.length) {
+                if (!$continueButton.length) {
                     log("Abort: .pss_actiontype_continue not found");
                     return;
                 }
@@ -597,10 +596,10 @@
                         };
                         var rows = $el.find('tbody tr');
                         log("Rows found", rows);
-                        if(rows.length > 0) {
-                            for(var i = 0; i < rows.length; i++) {
+                        if (rows.length > 0) {
+                            for (var i = 0; i < rows.length; i++) {
                                 var floorElement = $(rows[i]).find('.pss_fieldname_freestring2');
-                                if(floorElement.length > 0) {
+                                if (floorElement.length > 0) {
                                     data.floor = floorElement.text().trim().split(' - ')[0];
                                 }
                             }
@@ -616,12 +615,11 @@
                     }
                 });
 
-                $langTarget.after($pubButton);
+                $continueButton.before($pubButton);
                 info("Button injected");
             }
 
             return $el;
-
         }
 
         // --- Static helpers ---
@@ -775,7 +773,6 @@
          * @summary sends put request to REST endpoint /services/sdk/platform/jaxrs/fmpool/partner/sabesapp/sabesapp/cadviewer/
          */
         fmpooljs.updateCadViewer = function (orderNumber) {
-            return;
             log("updateCadViewer", orderNumber);
             if (orderNumber == null) {
                 log("order number is null. request aborted");
