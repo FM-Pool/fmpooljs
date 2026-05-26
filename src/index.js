@@ -340,6 +340,9 @@
              * @returns fmpooljs object
              */
             $el.addFastPaggingButtonToTable = function () {
+                if($el.find('.pss_actiontype_prevpage').length == 0 && $el.find('.pss_actionname_nextpage').length == 0) {
+                    return;
+                }
                 var navwrapper = $el.find('.pss_navigation');
 
                 if ($("div.fmpooljs_spinner").length == 0) {
@@ -370,9 +373,6 @@
 
                 var hasNext = true;
                 var hasPrev = true;
-                if($el.find('.pss_actiontype_prevpage').length == 0 && $el.find('.pss_actionname_nextpage').length == 0) {
-                    return;
-                }
                 // set the correct disable status
                 log("check prev button is active", $el.find('.pss_actiontype_prevpage'), $el.find('.pss_actiontype_prevpage').hasClass('pss_disabled'));
                 if ($el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
