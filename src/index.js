@@ -372,7 +372,7 @@
                 var hasPrev = true;
                 // set the correct disable status
                 log("check prev button is active", $el.find('.pss_actiontype_prevpage'), $el.find('.pss_actiontype_prevpage').hasClass('pss_disabled'));
-                if ($el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
+                if ($el.find('.pss_actiontype_prevpage').length == 0 || $el.find('.pss_actiontype_prevpage').hasClass('pss_disabled')) {
                     hasPrev = false;
                     $el.find('.fmpooljs_minus_ten').addClass('pss_disabled');
                     $el.find('.fmpooljs_first_page').addClass('pss_disabled');
@@ -381,7 +381,7 @@
                     $el.find('.fmpooljs_first_page').removeClass('pss_disabled');
                 }
                 log("check next button is active", $el.find('.pss_actionname_nextpage'), $el.find('.pss_actionname_nextpage').hasClass('pss_disabled'));
-                if ($el.find('.pss_actionname_nextpage').hasClass('pss_disabled')) {
+                if ($el.find('.pss_actionname_nextpage').length == 0 || $el.find('.pss_actionname_nextpage').hasClass('pss_disabled')) {
                     hasNext = false;
                     $el.find('.fmpooljs_plus_ten').addClass('pss_disabled');
                     $el.find('.fmpooljs_last_page').addClass('pss_disabled');
