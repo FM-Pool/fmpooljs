@@ -340,6 +340,9 @@
              * @returns fmpooljs object
              */
             $el.addFastPaggingButtonToTable = function () {
+                if($el.find('.pss_actiontype_prevpage').length == 0 && $el.find('.pss_actionname_nextpage').length == 0) {
+                    return;
+                }
                 var navwrapper = $el.find('.pss_navigation');
 
                 if ($("div.fmpooljs_spinner").length == 0) {
